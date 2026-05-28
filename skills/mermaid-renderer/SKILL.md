@@ -7,6 +7,8 @@ description: Render Mermaid diagrams directly to the console as ASCII/Unicode ar
 
 This skill renders Mermaid flowchart/diagram syntax directly in the terminal as ASCII/Unicode art, or generates themed SVG images.
 
+> **Path Convention**: All paths in this document use `${SKILL_DIR}` to refer to the directory containing this SKILL.md file. When executing commands, resolve it to the actual absolute path of this skill's installation directory.
+
 ## Quality Workflow and Verification Gates
 
 To ensure high-quality and readable diagrams, you MUST adhere to the following workflow and pass the validation gates:
@@ -19,13 +21,12 @@ To ensure high-quality and readable diagrams, you MUST adhere to the following w
 
 ### 2. Execution and Rendering (运行与渲染)
 - Pipe the Mermaid source code directly to `render.js` to render the diagram before including it in your final response:
-  (paths below are relative to the repository root)
   ```bash
-  echo "graph TD; A --> B;" | node ./skills/mermaid-renderer/scripts/render.js
+  echo "graph TD; A --> B;" | node ${SKILL_DIR}/scripts/render.js
   ```
 - **Verification after modifying the renderer**: If you modify the renderer codebase, you MUST run the automated smoke harness to verify that no regressions were introduced:
   ```bash
-  npm run smoke --prefix ./skills/mermaid-renderer/scripts
+  npm run smoke --prefix ${SKILL_DIR}/scripts
   ```
 
 ### 3. Post-Rendering Quality Gates (输出校验)
@@ -41,13 +42,13 @@ To ensure high-quality and readable diagrams, you MUST adhere to the following w
 
 ```bash
 # Display Unicode art directly in the terminal (default format)
-echo "graph TD; A --> B; B --> C;" | node ./skills/mermaid-renderer/scripts/render.js
+echo "graph TD; A --> B; B --> C;" | node ${SKILL_DIR}/scripts/render.js
 
 # Display plain ASCII art directly in the terminal
-echo "graph TD; A --> B; B --> C;" | node ./skills/mermaid-renderer/scripts/render.js -f ascii
+echo "graph TD; A --> B; B --> C;" | node ${SKILL_DIR}/scripts/render.js -f ascii
 
 # Render from a file to standard output
-node ./skills/mermaid-renderer/scripts/render.js diagram.mmd
+node ${SKILL_DIR}/scripts/render.js diagram.mmd
 ```
 
 ### Options
@@ -66,7 +67,7 @@ Preferences (theme, font, dimensions, padding) are resolved in the following pri
 1. **Environment Variables**: E.g., `MERMAID_THEME=dracula`, `MERMAID_FONT=Inter`, `MERMAID_ROUNDED_EDGES=false`.
 2. **Local Project Config**: Reads `preferences.json`, `.mermaidrc.json`, or `.mermaidrc` in the current working directory.
    - *Note: Reading from a local `preferences.json` is deprecated and will emit a warning. Prefer renaming the file to `.mermaidrc.json` or `.mermaidrc` to avoid collision.*
-3. **Global Config**: Reads `./skills/mermaid-renderer/preferences.json` (auto-generated on first run).
+3. **Global Config**: Reads `${SKILL_DIR}/preferences.json` (auto-generated on first run).
 4. **Defaults**: Hardcoded script defaults.
 
 The preferences schema:
