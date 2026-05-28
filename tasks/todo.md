@@ -158,7 +158,7 @@ Change: (变更内容：)
 
 Acceptance criteria: (验收标准：)
 
-- `SKILL.md` contains explicit pre-render and post-render checks. (`SKILL.md` 包含显式的渲染前 and 渲染后检查项。)
+- `SKILL.md` contains explicit pre-render and post-render checks. (`SKILL.md` 包含显式的渲染前和渲染后检查项。)
 - The checks are phrased as pass/fail quality constraints. (检查项应表述为“通过/不通过”的质量约束条件。)
 - The doc does not grow into a template catalog. (文档不应膨胀为模板目录。)
 - The doc tells the model what to do when output is invalid or low-quality. (文档应指导模型在输出无效或低质量时该如何处理。)
