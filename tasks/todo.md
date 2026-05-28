@@ -62,7 +62,7 @@ Acceptance criteria: (验收标准：)
 - Each fixture asserts stdout is non-empty. (每个测试用例均断言标准输出（stdout）不为空。)
 - Text fixtures assert key semantic labels are present in output. (文本格式测试用例断言输出中包含关键的语义标签。)
 - SVG fixtures assert output starts with `<svg` and contains expected semantic labels. (SVG 格式测试用例断言输出以 `<svg` 开头，且包含预期的语义标签。)
-- Failure output names the diagram type and failed assertion. (测试失败 of 输出信息中应指明图表类型及失败的断言。)
+- Failure output names the diagram type and failed assertion. (测试失败时输出信息中应指明图表类型及失败的断言。)
 
 ### 2. Add Config Validation Before Rendering (渲染前添加配置校验)
 
