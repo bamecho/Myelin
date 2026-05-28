@@ -7,7 +7,7 @@ description: Render Mermaid diagrams directly to the console as ASCII/Unicode ar
 
 This skill renders Mermaid flowchart/diagram syntax directly in the terminal as ASCII/Unicode art, or generates themed SVG images.
 
-> **Path Convention**: All paths in this document use `${SKILL_DIR}` to refer to the directory containing this SKILL.md file. When executing commands, resolve it to the actual absolute path of this skill's installation directory.
+> **Path Convention**: All paths in this document use `__SKILL_DIR__` as a placeholder for the directory containing this SKILL.md file. Before executing any command, you **MUST** replace `__SKILL_DIR__` with the actual absolute path of this skill's installation directory (i.e. the parent directory of this SKILL.md file). **Do NOT** pass `__SKILL_DIR__` literally into shell commands — it is not a shell variable and will not be resolved automatically.
 
 ## Quality Workflow and Verification Gates
 
@@ -20,13 +20,25 @@ To ensure high-quality and readable diagrams, you MUST adhere to the following w
 - **Manage Complexity**: If a diagram is too dense or complex, split it into multiple smaller sub-diagrams rather than forcing an unreadable, massive single diagram.
 
 ### 2. Execution and Rendering (运行与渲染)
-- Pipe the Mermaid source code directly to `render.js` to render the diagram before including it in your final response:
+- **Recommended Way (Best for Windows and Complex/Multiline Diagrams)**: Pass the Mermaid source code directly using the `-c` or `--code` argument. This avoids writing temporary files and avoids Windows pipe/redirection issues like `stdin is not a tty`:
   ```bash
-  echo "graph TD; A --> B;" | node ${SKILL_DIR}/scripts/render.js
+  node __SKILL_DIR__/scripts/render.js -c "graph TD; A --> B;"
+  ```
+- **Windows Alignment & Line Offset Tip**: In Windows terminals (CMD, PowerShell), certain Unicode characters (like `▼`, `►`, and box-drawing lines) may render with inconsistent character widths in local fonts, causing line segments or arrows to look misaligned or offset. **To resolve line offsets on Windows, append `-f ascii`** to force standard, single-width ASCII characters for drawing the diagram:
+  ```bash
+  node __SKILL_DIR__/scripts/render.js -c "graph TD; A --> B;" -f ascii
+  ```
+- Alternatively, you can read from a file by specifying the file path:
+  ```bash
+  node __SKILL_DIR__/scripts/render.js path/to/diagram.mmd
+  ```
+- Or pipe simple single-line diagrams via standard input (less recommended on Windows):
+  ```bash
+  echo "graph TD; A --> B;" | node __SKILL_DIR__/scripts/render.js
   ```
 - **Verification after modifying the renderer**: If you modify the renderer codebase, you MUST run the automated smoke harness to verify that no regressions were introduced:
   ```bash
-  npm run smoke --prefix ${SKILL_DIR}/scripts
+  npm run smoke --prefix __SKILL_DIR__/scripts
   ```
 
 ### 3. Post-Rendering Quality Gates (输出校验)
@@ -41,18 +53,19 @@ To ensure high-quality and readable diagrams, you MUST adhere to the following w
 ### Basic Commands
 
 ```bash
-# Display Unicode art directly in the terminal (default format)
-echo "graph TD; A --> B; B --> C;" | node ${SKILL_DIR}/scripts/render.js
-
-# Display plain ASCII art directly in the terminal
-echo "graph TD; A --> B; B --> C;" | node ${SKILL_DIR}/scripts/render.js -f ascii
+# Display Unicode art directly using code argument (Recommended)
+node __SKILL_DIR__/scripts/render.js -c "graph TD; A --> B; B --> C;"
 
 # Render from a file to standard output
-node ${SKILL_DIR}/scripts/render.js diagram.mmd
+node __SKILL_DIR__/scripts/render.js diagram.mmd
+
+# Display plain ASCII art directly using code argument
+node __SKILL_DIR__/scripts/render.js -c "graph TD; A --> B; B --> C;" -f ascii
 ```
 
 ### Options
 
+- `-c, --code <string>`: Direct Mermaid diagram source code string to render.
 - `-o, --output <file>`: Output file path. If omitted, writes to standard output.
 - `-f, --format <ascii|unicode|svg>`: Force output format:
   - `unicode`: (Default) Renders Unicode box-drawing character layout (`┌`, `─`, `│`, `►`).
@@ -67,7 +80,7 @@ Preferences (theme, font, dimensions, padding) are resolved in the following pri
 1. **Environment Variables**: E.g., `MERMAID_THEME=dracula`, `MERMAID_FONT=Inter`, `MERMAID_ROUNDED_EDGES=false`.
 2. **Local Project Config**: Reads `preferences.json`, `.mermaidrc.json`, or `.mermaidrc` in the current working directory.
    - *Note: Reading from a local `preferences.json` is deprecated and will emit a warning. Prefer renaming the file to `.mermaidrc.json` or `.mermaidrc` to avoid collision.*
-3. **Global Config**: Reads `${SKILL_DIR}/preferences.json` (auto-generated on first run).
+3. **Global Config**: Reads `__SKILL_DIR__/preferences.json` (auto-generated on first run).
 4. **Defaults**: Hardcoded script defaults.
 
 The preferences schema:
