@@ -1,72 +1,83 @@
 ---
 name: mermaid-renderer
-description: Render Mermaid diagram source code into beautiful SVGs or ASCII/Unicode art. Use this skill when the user wants to convert Mermaid flowcharts, sequence diagrams, class diagrams, state diagrams, ER diagrams, or XY charts into files (SVG, ASCII, TXT) or display them as text in the console. Always trigger this skill when the user mentions rendering a mermaid diagram, generating a flowchart image/text, converting mermaid to SVG, drawing a sequence/state diagram, or visualizing graphs/charts in the workspace or terminal.
+description: Render Mermaid diagrams directly to the console as ASCII/Unicode art or save them as SVGs. Use this skill when the user wants to visualize Mermaid flowcharts, sequence diagrams, class diagrams, state diagrams, ER diagrams, or XY charts. Always trigger this skill when the user wants to draw a diagram, view a flowchart in the terminal, render Mermaid code, or convert a diagram into ASCII/Unicode console text or SVG.
 ---
 
 # Mermaid Renderer
 
-This skill converts Mermaid flowchart/diagram code to beautiful SVG images or ASCII/Unicode text representations.
+This skill renders Mermaid flowchart/diagram syntax directly in the terminal as ASCII/Unicode art, or generates themed SVG images.
 
-## Setup
+## Quality Workflow and Verification Gates
 
-Dependencies are managed via `scripts/package.json`. On first run the script
-automatically detects if `beautiful-mermaid` is missing and installs it with
-`npm install` (scoped to the `scripts/` directory), so **no manual setup is
-required**.
+To ensure high-quality and readable diagrams, you MUST adhere to the following workflow and pass the validation gates:
 
-If you prefer to pre-install the dependency manually:
+### 1. Pre-Rendering Design Gates (设计规约)
+- **Identify Intent**: Clearly determine the diagram's primary purpose and target audience.
+- **Select Family Intentionally**: Choose the appropriate diagram type (e.g., `flowchart` for logical flows, `sequenceDiagram` for interactions, `stateDiagram-v2` for state transitions, `classDiagram` for structure, `erDiagram` for data models, or `xychart-beta` for metrics).
+- **Maintain Semantics**: Do not lose critical entities, relationships, labels, or flow directionality during translation to Mermaid syntax.
+- **Manage Complexity**: If a diagram is too dense or complex, split it into multiple smaller sub-diagrams rather than forcing an unreadable, massive single diagram.
+
+### 2. Execution and Rendering (运行与渲染)
+- Pipe the Mermaid source code directly to `render.js` to render the diagram before including it in your final response:
+  ```bash
+  echo "graph TD; A --> B;" | node /home/user/agents-hub/Myelin/skills/mermaid-renderer/scripts/render.js
+  ```
+- **Verification after modifying the renderer**: If you modify the renderer codebase, you MUST run the automated smoke harness to verify that no regressions were introduced:
+  ```bash
+  npm run smoke --prefix /home/user/agents-hub/Myelin/skills/mermaid-renderer/scripts
+  ```
+
+### 3. Post-Rendering Quality Gates (输出校验)
+- **Visual Inspection**: Check the generated output (whether Unicode, ASCII, or SVG). Are the node borders intact? Are lines overlapping or messy?
+- **Label Integrity**: Ensure all semantic labels and text (e.g. node text, transition labels) are fully visible in the output and have not disappeared or been truncated.
+- **Self-Correction (Self-Repair)**: If rendering fails, or if key semantic labels are missing, analyze the error/output, fix the source syntax, and run the rendering command again. Do this correction cycle at least once before reporting failure.
+
+---
+
+## Technical CLI Usage
+
+### Basic Commands
 
 ```bash
-npm install --prefix /home/user/agents-hub/Myelin/skills/mermaid-renderer/scripts
-```
+# Display Unicode art directly in the terminal (default format)
+echo "graph TD; A --> B; B --> C;" | node /home/user/agents-hub/Myelin/skills/mermaid-renderer/scripts/render.js
 
-## How to use the skill
+# Display plain ASCII art directly in the terminal
+echo "graph TD; A --> B; B --> C;" | node /home/user/agents-hub/Myelin/skills/mermaid-renderer/scripts/render.js -f ascii
 
-Run the Node.js command line utility to render a Mermaid diagram:
-
-```bash
-node /home/user/agents-hub/Myelin/skills/mermaid-renderer/scripts/render.js [options] <input-file>
+# Render from a file to standard output
+node /home/user/agents-hub/Myelin/skills/mermaid-renderer/scripts/render.js diagram.mmd
 ```
 
 ### Options
 
 - `-o, --output <file>`: Output file path. If omitted, writes to standard output.
 - `-f, --format <ascii|unicode|svg>`: Force output format:
-  - `svg`: Renders a themed SVG string.
+  - `unicode`: (Default) Renders Unicode box-drawing character layout (`┌`, `─`, `│`, `►`).
   - `ascii`: Renders plain ASCII layout using simple characters (`+`, `-`, `|`, `>`).
-  - `unicode`: Renders Unicode box-drawing character layout (`┌`, `─`, `│`, `►`).
+  - `svg`: Renders a themed SVG string.
 - `--append`: Append to the output file instead of overwriting (requires `-o`).
 
-### Preferences
+### Preferences and Configuration
 
-Rendering preferences (theme, font, colors, padding) are stored in
-`/home/user/agents-hub/Myelin/skills/mermaid-renderer/preferences.json`.
+Preferences (theme, font, dimensions, padding) are resolved in the following priority order (highest priority wins):
 
-The file is **auto-generated with annotated defaults** on first run.
-Edit it to customize rendering behavior without passing CLI flags.
+1. **Environment Variables**: E.g., `MERMAID_THEME=dracula`, `MERMAID_FONT=Inter`, `MERMAID_ROUNDED_EDGES=false`.
+2. **Local Project Config**: Reads `preferences.json`, `.mermaidrc.json`, or `.mermaidrc` in the current working directory.
+   - *Note: Reading from a local `preferences.json` is deprecated and will emit a warning. Prefer renaming the file to `.mermaidrc.json` or `.mermaidrc` to avoid collision.*
+3. **Global Config**: Reads `/home/user/agents-hub/Myelin/skills/mermaid-renderer/preferences.json` (auto-generated on first run).
+4. **Defaults**: Hardcoded script defaults.
+
+The preferences schema:
 
 | Key | Type | Default | Description |
 |---|---|---|---|
-| `theme` | string | `"myelin-dark"` | SVG theme. Built-in: `tokyo-night`, `dracula`, `zinc-dark`, etc. `myelin-dark` is a custom theme matching the project palette. |
-| `font` | string | `"Inter"` | Font family for SVG rendering. |
+| `theme` | string | `"magazine"` | SVG theme. Built-in: `tokyo-night`, `dracula`, `zinc-dark`, etc. Or `"myelin-dark"`. |
+| `font` | string | `"Playfair Display"` | Font family for SVG rendering. |
 | `transparent` | boolean | `false` | If `true`, SVG background is transparent. |
-| `colorMode` | string | `"auto"` | Color mode for ASCII/Unicode: `none`, `ansi16`, `ansi256`, `truecolor`, `html`, `auto`. |
-| `paddingX` | number | `5` | Horizontal padding for ASCII/Unicode output. |
-| `paddingY` | number | `5` | Vertical padding for ASCII/Unicode output. |
-| `boxPadding` | number | `1` | Box border padding for ASCII/Unicode output. |
-
-### Examples
-
-```bash
-# Render SVG to file (uses theme/font/etc. from preferences.json)
-echo 'graph TD; A-->B; B-->C;' | node render.js -f svg -o diagram.svg
-
-# Render Unicode to stdout
-node render.js -f unicode flowchart.mmd
-
-# Render ASCII to stdout
-echo 'graph LR; A-->B;' | node render.js -f ascii
-
-# Append output to an existing file
-node render.js -f unicode -o output.txt --append flowchart.mmd
-```
+| `roundedEdges` | boolean | `true` | If `true`, flowchart connections have rounded corners in SVG. |
+| `asciiTheme` | string | `"myelin-dark"` | Theme name for ASCII/Unicode console output. |
+| `colorMode` | string | `"auto"` | Color mode: `none`, `ansi16`, `ansi256`, `truecolor`, `html`, `auto`. |
+| `paddingX` | number | `7` | Horizontal padding for ASCII/Unicode. |
+| `paddingY` | number | `6` | Vertical padding for ASCII/Unicode. |
+| `boxPadding` | number | `2` | Box border padding for ASCII/Unicode. |
