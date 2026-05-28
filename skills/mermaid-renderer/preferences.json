@@ -1,0 +1,16 @@
+{
+  "_comment_theme": "SVG theme name. Built-in: tokyo-night, dracula, zinc-dark, catppuccin-latte, etc. Or 'myelin-dark' (custom).",
+  "theme": "myelin-dark",
+  "_comment_font": "Font family for SVG rendering.",
+  "font": "Inter",
+  "_comment_transparent": "If true, SVG background is transparent.",
+  "transparent": false,
+  "_comment_colorMode": "Color mode for ASCII/Unicode: none, ansi16, ansi256, truecolor, html, auto.",
+  "colorMode": "auto",
+  "_comment_paddingX": "Horizontal padding for ASCII/Unicode output.",
+  "paddingX": 5,
+  "_comment_paddingY": "Vertical padding for ASCII/Unicode output.",
+  "paddingY": 5,
+  "_comment_boxPadding": "Box border padding for ASCII/Unicode output.",
+  "boxPadding": 1
+}

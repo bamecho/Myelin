@@ -1,4 +1,4 @@
-import { readFileSync, appendFileSync, writeFileSync } from "fs";
+import { readFileSync, appendFileSync, writeFileSync, existsSync } from "fs";
 import { execSync } from "child_process";
 import { fileURLToPath } from "url";
 import { parseArgs } from "util";
@@ -7,13 +7,64 @@ import path from "path";
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SKILL_DIR = path.resolve(__dirname, "..");
+const PREFERENCES_PATH = path.join(SKILL_DIR, "preferences.json");
 
 // Exit codes:
 //   0 – success
-//   1 – user error  (bad args, missing input, unknown option, …)
+//   1 – user error  (bad args, missing input, …)
 //   2 – runtime error (render failure, file I/O error, install failure, …)
 const EXIT_USER_ERROR = 1;
 const EXIT_RUNTIME_ERROR = 2;
+
+// ─── Custom Theme: Myelin Dark ───────────────────────────────────────────────
+// Based on the project's Notion-inspired DESIGN.md palette:
+//   navy backgrounds, purple accents, white/light text.
+
+const MYELIN_DARK_THEME = {
+  background:    "#191919",
+  primaryColor:  "#2d2d3d",
+  primaryBorderColor: "#7c5cfc",
+  primaryTextColor:   "#ffffff",
+  lineColor:     "#a78bfa",
+  secondaryColor:     "#1e1e2e",
+  tertiaryColor:      "#2a2a3a",
+  textColor:     "#e0e0e0",
+  mainBkg:       "#2d2d3d",
+  nodeBorder:    "#7c5cfc",
+  clusterBkg:    "#1e1e2e",
+  clusterBorder: "#7c5cfc",
+  titleColor:    "#ffffff",
+  edgeLabelBackground: "#191919",
+};
+
+// ─── Default Preferences ─────────────────────────────────────────────────────
+
+const DEFAULT_PREFERENCES = {
+  _comment_theme:       "SVG theme name. Built-in: tokyo-night, dracula, zinc-dark, catppuccin-latte, etc. Or 'myelin-dark' (custom).",
+  theme:                "myelin-dark",
+
+  _comment_font:        "Font family for SVG rendering.",
+  font:                 "Inter",
+
+  _comment_transparent: "If true, SVG background is transparent.",
+  transparent:          false,
+
+  _comment_colorMode:   "Color mode for ASCII/Unicode: none, ansi16, ansi256, truecolor, html, auto.",
+  colorMode:            "auto",
+
+  _comment_paddingX:    "Horizontal padding for ASCII/Unicode output.",
+  paddingX:             5,
+
+  _comment_paddingY:    "Vertical padding for ASCII/Unicode output.",
+  paddingY:             5,
+
+  _comment_boxPadding:  "Box border padding for ASCII/Unicode output.",
+  boxPadding:           1,
+};
+
+// Keys that carry actual config (filter out _comment_* keys).
+const PREFERENCE_KEYS = Object.keys(DEFAULT_PREFERENCES).filter((k) => !k.startsWith("_comment_"));
 
 // ─── Dependency bootstrap ────────────────────────────────────────────────────
 
@@ -43,6 +94,57 @@ async function ensureDependencies() {
   }
 }
 
+// ─── Preferences ─────────────────────────────────────────────────────────────
+
+/**
+ * Load rendering preferences from preferences.json.
+ *
+ * Resolution order:
+ *   hardcoded defaults  →  preferences.json overrides
+ *
+ * If the file does not exist, it is auto-generated with annotated defaults.
+ * If the file is malformed, a warning is printed and defaults are used.
+ */
+function loadPreferences() {
+  const defaults = {};
+  for (const key of PREFERENCE_KEYS) {
+    defaults[key] = DEFAULT_PREFERENCES[key];
+  }
+
+  if (!existsSync(PREFERENCES_PATH)) {
+    try {
+      writeFileSync(PREFERENCES_PATH, JSON.stringify(DEFAULT_PREFERENCES, null, 2) + "\n", "utf8");
+      console.error(`[mermaid-renderer] Generated default preferences at ${PREFERENCES_PATH}`);
+    } catch (err) {
+      console.warn(`[mermaid-renderer] Warning: Could not write default preferences: ${err.message}`);
+    }
+    return defaults;
+  }
+
+  try {
+    const raw = readFileSync(PREFERENCES_PATH, "utf8");
+    const parsed = JSON.parse(raw);
+
+    // Warn on unknown keys (ignoring _comment_* fields).
+    for (const key of Object.keys(parsed)) {
+      if (!key.startsWith("_comment_") && !PREFERENCE_KEYS.includes(key)) {
+        console.warn(`[mermaid-renderer] Warning: Unknown preference key '${key}' in preferences.json — ignored.`);
+      }
+    }
+
+    // Merge: defaults ← file values (only known keys).
+    for (const key of PREFERENCE_KEYS) {
+      if (key in parsed) {
+        defaults[key] = parsed[key];
+      }
+    }
+    return defaults;
+  } catch (err) {
+    console.warn(`[mermaid-renderer] Warning: Failed to read preferences.json: ${err.message}. Using defaults.`);
+    return defaults;
+  }
+}
+
 // ─── Argument parsing ────────────────────────────────────────────────────────
 
 const HELP_TEXT = `
@@ -58,19 +160,14 @@ Options:
   -f, --format <format>     Output format: 'svg', 'ascii', 'unicode'.
                             Inferred from --output extension when omitted:
                             '.svg' → 'svg', other/none → 'unicode'.
-  -t, --theme <theme>       SVG theme: 'tokyo-night', 'dracula', 'zinc-dark', etc.
-  -u, --use-ascii           Use ASCII box-drawing (+, -, |, >) instead of Unicode.
-  -c, --color-mode <mode>   Color mode for ASCII/Unicode:
-                            'none', 'ansi16', 'ansi256', 'truecolor', 'html', 'auto'.
-                            Default: 'auto'.
-      --transparent         Make SVG background transparent.
-      --font <name>         Font family for SVG. Default: 'Inter'.
-      --padding-x <n>       ASCII horizontal padding. Default: 5.
-      --padding-y <n>       ASCII vertical padding. Default: 5.
-      --box-padding <n>     ASCII box border padding. Default: 1.
+
+Rendering preferences (theme, font, colors, padding, etc.) are loaded from:
+  ${PREFERENCES_PATH}
+
+The preferences file is auto-generated on first run.
+Edit it to customize rendering defaults.
 `;
 
-const SUPPORTED_COLOR_MODES = new Set(["auto", "none", "ansi16", "ansi256", "truecolor", "html"]);
 const SUPPORTED_FORMATS = new Set(["svg", "ascii", "unicode"]);
 
 function parseCliArgs(argv) {
@@ -80,18 +177,10 @@ function parseCliArgs(argv) {
       args: argv,
       allowPositionals: true,
       options: {
-        help:         { type: "boolean", short: "h", default: false },
-        output:       { type: "string",  short: "o" },
-        append:       { type: "boolean",              default: false },
-        format:       { type: "string",  short: "f" },
-        theme:        { type: "string",  short: "t" },
-        "use-ascii":  { type: "boolean", short: "u", default: false },
-        "color-mode": { type: "string",  short: "c", default: "auto" },
-        transparent:  { type: "boolean",              default: false },
-        font:         { type: "string",               default: "Inter" },
-        "padding-x":  { type: "string" },
-        "padding-y":  { type: "string" },
-        "box-padding":{ type: "string" },
+        help:   { type: "boolean", short: "h", default: false },
+        output: { type: "string",  short: "o" },
+        append: { type: "boolean",              default: false },
+        format: { type: "string",  short: "f" },
       },
     });
   } catch (err) {
@@ -117,44 +206,17 @@ function parseCliArgs(argv) {
     values.format = f;
   }
 
-  // Validate --color-mode
-  const colorMode = values["color-mode"];
-  if (!SUPPORTED_COLOR_MODES.has(colorMode)) {
-    console.error(`Invalid --color-mode: '${colorMode}'. Expected: ${[...SUPPORTED_COLOR_MODES].join(", ")}.`);
-    process.exit(EXIT_USER_ERROR);
-  }
-
   // Validate --append requires --output
   if (values.append && !values.output) {
     console.error("--append requires --output to be specified.");
     process.exit(EXIT_USER_ERROR);
   }
 
-  // Validate integer options
-  function parseIntOption(name) {
-    const raw = values[name];
-    if (raw === undefined) return undefined;
-    const n = parseInt(raw, 10);
-    if (Number.isNaN(n)) {
-      console.error(`Invalid integer for --${name}: '${raw}'.`);
-      process.exit(EXIT_USER_ERROR);
-    }
-    return n;
-  }
-
   return {
-    inputFile: positionals[0] ?? null,
+    inputFile:  positionals[0] ?? null,
     outputFile: values.output ?? null,
-    append: values.append,
-    format: values.format ?? null,
-    theme: values.theme ?? null,
-    useAscii: values["use-ascii"],
-    colorMode,
-    transparent: values.transparent,
-    font: values.font,
-    paddingX: parseIntOption("padding-x"),
-    paddingY: parseIntOption("padding-y"),
-    boxPadding: parseIntOption("box-padding"),
+    append:     values.append,
+    format:     values.format ?? null,
   };
 }
 
@@ -182,24 +244,36 @@ async function readInput(inputFile) {
 // ─── Renderers ───────────────────────────────────────────────────────────────
 
 /**
+ * Resolve the theme options object for SVG rendering.
+ * If the preference theme is "myelin-dark", use the custom theme.
+ * Otherwise, look it up in the library's built-in THEMES.
+ */
+function resolveTheme(themeName, THEMES) {
+  if (themeName === "myelin-dark") {
+    return MYELIN_DARK_THEME;
+  }
+  if (THEMES && THEMES[themeName]) {
+    return THEMES[themeName];
+  }
+  if (themeName) {
+    console.warn(`Warning: Theme '${themeName}' not found. Using default colors.`);
+  }
+  return {};
+}
+
+/**
  * Render mermaid source to SVG.
  * @param {string} input  Raw mermaid diagram text.
- * @param {object} opts   Parsed CLI options.
+ * @param {object} prefs  Loaded preferences.
  * @param {object} lib    { renderMermaidSVG, THEMES }
  */
-function renderSVG(input, opts, { renderMermaidSVG, THEMES }) {
+function renderSVG(input, prefs, { renderMermaidSVG, THEMES }) {
+  const themeColors = resolveTheme(prefs.theme, THEMES);
   const svgOpts = {
-    transparent: opts.transparent,
-    font: opts.font,
+    transparent: prefs.transparent,
+    font: prefs.font,
+    ...themeColors,
   };
-  if (opts.theme) {
-    const selectedTheme = THEMES[opts.theme];
-    if (selectedTheme) {
-      Object.assign(svgOpts, selectedTheme);
-    } else {
-      console.warn(`Warning: Theme '${opts.theme}' not found. Using default colors.`);
-    }
-  }
   try {
     return renderMermaidSVG(input, svgOpts);
   } catch (err) {
@@ -210,17 +284,18 @@ function renderSVG(input, opts, { renderMermaidSVG, THEMES }) {
 
 /**
  * Render mermaid source to ASCII or Unicode text.
- * @param {string} input  Raw mermaid diagram text.
- * @param {object} opts   Parsed CLI options.
- * @param {object} lib    { renderMermaidASCII }
+ * @param {string} input   Raw mermaid diagram text.
+ * @param {object} prefs   Loaded preferences.
+ * @param {string} format  "ascii" or "unicode".
+ * @param {object} lib     { renderMermaidASCII }
  */
-function renderText(input, opts, { renderMermaidASCII }) {
+function renderText(input, prefs, format, { renderMermaidASCII }) {
   const textOpts = {
-    useAscii: opts.useAscii || opts.format === "ascii",
-    colorMode: opts.colorMode,
-    paddingX: opts.paddingX,
-    paddingY: opts.paddingY,
-    boxBorderPadding: opts.boxPadding,
+    useAscii:        format === "ascii",
+    colorMode:       prefs.colorMode,
+    paddingX:        prefs.paddingX,
+    paddingY:        prefs.paddingY,
+    boxBorderPadding: prefs.boxPadding,
   };
   try {
     return renderMermaidASCII(input, textOpts);
@@ -255,29 +330,32 @@ function writeOutput(result, outputFile, append) {
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
-  // 1. Parse arguments
+  // 1. Parse arguments (slim: only output, format, append)
   const opts = parseCliArgs(process.argv.slice(2));
 
-  // 2. Load library (auto-install on first run)
+  // 2. Load rendering preferences (theme, font, colors, padding, …)
+  const prefs = loadPreferences();
+
+  // 3. Load library (auto-install on first run)
   const lib = await ensureDependencies();
 
-  // 3. Read input
+  // 4. Read input
   const input = await readInput(opts.inputFile);
   if (!input.trim()) {
     console.error("Error: Input is empty.");
     process.exit(EXIT_USER_ERROR);
   }
 
-  // 4. Resolve format
+  // 5. Resolve format: CLI flag > output extension > default (unicode)
   const format = opts.format
-    ?? (opts.outputFile?.endsWith(".svg") ? "svg" : opts.useAscii ? "ascii" : "unicode");
+    ?? (opts.outputFile?.endsWith(".svg") ? "svg" : "unicode");
 
-  // 5. Render
+  // 6. Render
   const result = format === "svg"
-    ? renderSVG(input, opts, lib)
-    : renderText(input, { ...opts, format }, lib);
+    ? renderSVG(input, prefs, lib)
+    : renderText(input, prefs, format, lib);
 
-  // 6. Write output
+  // 7. Write output
   writeOutput(result, opts.outputFile, opts.append);
 }
 
