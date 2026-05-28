@@ -1,0 +1,12 @@
+{
+  "name": "mermaid-renderer",
+  "version": "1.0.0",
+  "description": "Render Mermaid diagrams to SVG or ASCII/Unicode art.",
+  "type": "module",
+  "scripts": {
+    "smoke": "node smoke.js"
+  },
+  "dependencies": {
+    "beautiful-mermaid": "1.1.3"
+  }
+}
