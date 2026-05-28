@@ -106,7 +106,7 @@ async function ensureDependencies() {
     console.error("[mermaid-renderer] 'beautiful-mermaid' not found. Installing dependencies...");
     try {
       execSync(`npm install --prefix ${JSON.stringify(__dirname)}`, {
-        stdio: "inherit",
+        stdio: ["ignore", "inherit", "inherit"],
         cwd: __dirname,
       });
       console.error("[mermaid-renderer] Installation complete. Retrying import...");
@@ -239,6 +239,7 @@ Input:
 
 Options:
   -h, --help                Show this help message.
+  -c, --code <string>       Direct Mermaid diagram source code string to render.
   -o, --output <file>       Output file path. If omitted, writes to stdout.
       --append              Append to output file instead of overwriting. (requires -o)
   -f, --format <format>     Output format: 'svg', 'ascii', 'unicode'.
@@ -262,6 +263,7 @@ function parseCliArgs(argv) {
       allowPositionals: true,
       options: {
         help:   { type: "boolean", short: "h", default: false },
+        code:   { type: "string",  short: "c" },
         output: { type: "string",  short: "o" },
         append: { type: "boolean",              default: false },
         format: { type: "string",  short: "f" },
@@ -301,6 +303,7 @@ function parseCliArgs(argv) {
     outputFile: values.output ?? null,
     append:     values.append,
     format:     values.format ?? null,
+    code:       values.code ?? null,
   };
 }
 
@@ -670,7 +673,9 @@ async function main() {
   const lib = await ensureDependencies();
 
   // 4. Read input
-  const rawInput = await readInput(opts.inputFile);
+  let rawInput = opts.code !== null ? opts.code : await readInput(opts.inputFile);
+  // Normalize Windows-style carriage returns (\r) to prevent layout/alignment offsets
+  rawInput = rawInput.replace(/\r/g, "");
   if (!rawInput.trim()) {
     console.error("Error: Input is empty.");
     process.exit(EXIT_USER_ERROR);
