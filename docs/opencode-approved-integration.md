@@ -20,29 +20,65 @@
 
   dump_cline.py：
 
+  import base64
   import json
   from datetime import datetime
+  from pathlib import Path
   from mitmproxy import http
 
   TARGET_HOST = "你的内网域名"
-  OUT_FILE = "cline_requests.jsonl"
+  OUT_FILE = Path(__file__).with_name("cline_requests.jsonl")
+
+  print(f"[dump_cline] writing to {OUT_FILE.resolve()}")
 
   def request(flow: http.HTTPFlow) -> None:
       if TARGET_HOST not in flow.request.pretty_host:
           return
+
+      raw_body = flow.request.raw_content or b""
+      content_type = flow.request.headers.get("content-type", "")
+      body_text = None
+      body_base64 = None
+      try:
+          body_text = flow.request.get_text(strict=False)
+      except Exception:
+          body_base64 = base64.b64encode(raw_body).decode("ascii")
 
       record = {
           "time": datetime.utcnow().isoformat() + "Z",
           "method": flow.request.method,
           "url": flow.request.pretty_url,
           "headers": dict(flow.request.headers),
-          "body": flow.request.get_text(strict=False),
+          "content_type": content_type,
+          "body_size": len(raw_body),
+          "body_text": body_text,
+          "body_base64": body_base64,
       }
 
-      with open(OUT_FILE, "a", encoding="utf-8") as f:
+      with OUT_FILE.open("a", encoding="utf-8") as f:
           f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
-      print(f"[captured] {flow.request.method} {flow.request.pretty_url}")
+      print(
+          json.dumps(
+              {
+                  "captured": True,
+                  "method": flow.request.method,
+                  "url": flow.request.pretty_url,
+                  "body_size": len(raw_body),
+                  "content_type": content_type,
+                  "body_preview": (body_text[:200] if body_text else None),
+              },
+              ensure_ascii=False,
+          )
+      )
+
+  注意：
+
+  - 不要直接 `print(flow.request.content)`、`print(flow.request.raw_content)` 或依赖终端里展开大对象。
+  - 这些值经常只会显示成大小摘要，比如 `19b`、`21b`、`8.1k`，那不代表没抓到，只代表你看到的是 bytes/对象摘要。
+  - 真正完整的请求内容请看 `cline_requests.jsonl`，每一行都是一条完整 JSON。
+  - 文件会生成在 `dump_cline.py` 同目录，不再依赖你启动 `mitmdump` 时的当前工作目录。
+  - 如果文件一直没生成，先看是不是 `TARGET_HOST` 没匹配上，导致一开始就 `return` 了。
 
   VS Code / Cursor settings.json：
 
@@ -195,17 +231,24 @@
 
   建一个文件 dump_cline.py：
 
+  import base64
   import json
   from datetime import datetime
+  from pathlib import Path
   from mitmproxy import http
 
-  OUT_FILE = "cline_requests.jsonl"
+  OUT_FILE = Path(__file__).with_name("cline_requests.jsonl")
+
+  print(f"[dump_cline] writing to {OUT_FILE.resolve()}")
 
   def request(flow: http.HTTPFlow) -> None:
+      raw_body = flow.request.raw_content or b""
+      content_type = flow.request.headers.get("content-type", "")
       try:
           body_text = flow.request.get_text(strict=False)
       except Exception:
           body_text = None
+      body_base64 = None if body_text is not None else base64.b64encode(raw_body).decode("ascii")
 
       record = {
           "time": datetime.utcnow().isoformat() + "Z",
@@ -214,13 +257,32 @@
           "host": flow.request.pretty_host,
           "path": flow.request.path,
           "headers": dict(flow.request.headers),
-          "body": body_text,
+          "content_type": content_type,
+          "body_size": len(raw_body),
+          "body_text": body_text,
+          "body_base64": body_base64,
       }
 
-      with open(OUT_FILE, "a", encoding="utf-8") as f:
+      with OUT_FILE.open("a", encoding="utf-8") as f:
           f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
-      print(f"[captured] {flow.request.method} {flow.request.pretty_url}")
+      print(
+          json.dumps(
+              {
+                  "captured": True,
+                  "method": flow.request.method,
+                  "url": flow.request.pretty_url,
+                  "body_size": len(raw_body),
+                  "content_type": content_type,
+                  "body_preview": (body_text[:200] if body_text else None),
+              },
+              ensure_ascii=False,
+          )
+      )
+
+  如果你在终端里看到的还是 `19b`、`21b`、`8.1k` 这种值，优先去看 `cline_requests.jsonl`。
+  终端输出只保留摘要即可，完整 body 以落盘文件为准。
+  这个文件会写到 `dump_cline.py` 同目录；启动时终端会先打印出实际落盘路径。
 
   ———
 
