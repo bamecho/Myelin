@@ -1,0 +1,31 @@
+{
+  "name": "bam-mode",
+  "displayName": "Bam Mode",
+  "version": "0.1.0",
+  "description": "Bam's self-contained engineering mode. Packages a self-contained engineering workflow with playbooks, principles, review gates, and Chinese writing support.",
+  "author": {
+    "name": "Bam"
+  },
+  "homepage": "https://github.com/bamecho/Myelin",
+  "repository": "https://github.com/bamecho/Myelin",
+  "license": "MIT",
+  "keywords": [
+    "bam-mode",
+    "cursor-plugin",
+    "engineering",
+    "workflow",
+    "principles",
+    "review",
+    "planning"
+  ],
+  "category": "productivity",
+  "tags": [
+    "productivity",
+    "engineering",
+    "workflow",
+    "principles"
+  ],
+  "skills": "./skills/bam-mode/",
+  "agents": "./agents/",
+  "rules": "./rules/"
+}

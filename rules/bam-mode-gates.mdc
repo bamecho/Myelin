@@ -1,0 +1,11 @@
+---
+description: Keep bam-mode principles and playbooks active during engineering.
+alwaysApply: true
+---
+
+# Bam Mode Gates
+
+When editing files or writing code in this repository:
+1. Follow the non-negotiables in the `bam-mode` skill: name the data shape first, use `how` for nontrivial decisions, use `architect` for boundaries, etc.
+2. Adhere to Bam's core principles: `principle-laziness-protocol`, `principle-foundational-thinking`, `principle-redesign-from-first-principles`, `principle-subtract-before-you-add`, `principle-minimize-reader-load`, `principle-prove-it-works`.
+3. Follow the document-and-review lane for medium/large tasks, establishing target boundaries and verifying them before finalizing.
