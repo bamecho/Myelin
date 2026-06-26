@@ -1,0 +1,24 @@
+{
+  "name": "bam-mode",
+  "version": "0.1.0",
+  "description": "Bam's self-contained engineering mode for Codex.",
+  "author": {
+    "name": "Bam"
+  },
+  "skills": "./skills/bam-mode/",
+  "interface": {
+    "displayName": "Bam Mode",
+    "shortDescription": "Run Bam's document-and-review engineering mode.",
+    "longDescription": "Bam Mode packages a self-contained engineering workflow with playbooks, principles, review gates, and Chinese writing support.",
+    "developerName": "Bam",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "/bam-mode plan this change",
+      "Use bam-mode for this implementation",
+      "Review this with Bam's gates"
+    ]
+  }
+}

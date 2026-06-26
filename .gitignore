@@ -1,5 +1,6 @@
 # Runtime / agent workspace directories
 .agents/
+.cursor/
 .claude/
 
 # Scratch / temp directories
