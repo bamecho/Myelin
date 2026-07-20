@@ -22,7 +22,7 @@ becomes a top-level route.
 
    ```md
    ## Agent job
-   - Role: <specialist | worker | reviewer>
+   - Role: <scout | specialist | worker | reviewer>
    - Endpoint: <one observable deliverable>
    - Context: <fresh | inherited, with reason>
    - Authority: <Handoff and named artifact paths>
@@ -34,9 +34,11 @@ becomes a top-level route.
    - Return: <artifact path or concise structured fields>
    ```
 4. **Protect ownership and state.** The receiver owns only the Agent job. It does
-   not select another playbook or create a child workflow. Keep one active writer
-   per writable state. Parallel writers require genuinely independent state;
-   otherwise serialize ownership.
+   not select another playbook or create a child workflow. Scout gathers
+   evidence, Specialist decides or synthesizes one artifact, Worker writes, and
+   Reviewer judges independently. Keep one active writer per writable state.
+   Parallel writers require genuinely independent state; otherwise serialize
+   ownership.
 5. **Accept the return.** The owning playbook checks the returned artifact and
    proof against the Agent job. Worker completion is an intermediate handback,
    not task completion. The owner accepts, sends a bounded rework job, escalates

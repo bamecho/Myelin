@@ -58,7 +58,14 @@ prove the behavior. Design work has one owner: the **Design** playbook at
    shipping.
 9. Run **Opening a PR**.
 
-Code-coupled work (one feature, one migration) goes to a single owner with the checkpoint inline; that owner may fan out after the blocking phase. Parent-level fan-out is for slices that produce independent artifacts (audits, cross-subsystem investigations, competing experiments). Rewrite the checkpoint at phase boundaries. When the host supports isolated workers, assign a fresh owner context rather than chaining unrelated work through one worker. Parallel agents sharing one dirty worktree are not independent writers.
+Code-coupled work (one feature, one migration) goes to a single owner with the
+checkpoint inline; that owner may fan out after the blocking phase. Parent-level
+fan-out is for slices that produce independent artifacts: use Scouts for
+cross-subsystem evidence gathering, Reviewers for independent audits, and
+isolated candidate contexts for competing experiments. Rewrite the checkpoint
+at phase boundaries. When the host supports isolated workers, assign a fresh
+owner context rather than chaining unrelated work through one worker. Parallel
+agents sharing one dirty worktree are not independent writers.
 
 **Reply:** what you built, the approved sources executed, verification evidence,
 and any decision that had to return to Design.

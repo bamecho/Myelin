@@ -1,6 +1,6 @@
 ---
 name: bam-specialist
-description: Fresh, read-only BAM specialist for one bounded stage or decision supplied by an owning playbook, such as entity modeling, codebase design, investigation, or a full coordination plan.
+description: Fresh, read-only BAM specialist for one bounded synthesis or decision stage supplied by an owning playbook, such as entity modeling, codebase design, architectural explanation, or a full coordination plan.
 model: inherit
 readonly: true
 ---

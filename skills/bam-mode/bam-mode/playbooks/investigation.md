@@ -5,7 +5,14 @@
 Read-only requests: "how does X work?", "why was Y built this way?", "are we sure about Z?", "should we do X or Y?". They produce a cited explanation or a recommendation, not a code change.
 
 1. Route through the **how** skill (Explain mode for narrow questions, Critique mode for "are we sure?"). For motivation questions, also route through the **why** skill.
-2. For broad scans, long files, repeated searches, or fan-out source reading, apply the **principle-guard-the-context-window** skill. Use independent readers when the host provides them; otherwise perform bounded sequential passes and keep only file pointers and findings in the main thread.
+2. For broad scans, long files, repeated searches, or fan-out source reading,
+   apply the **principle-guard-the-context-window** skill. Compose **Agent
+   handoff** and assign bounded source slices to fresh Scouts when the host
+   provides isolated roles and the separation saves context. Each Scout returns
+   cited findings, sources and queries, unknowns, and confidence; the
+   Investigation owner synthesizes the answer. Otherwise perform the same
+   bounded passes sequentially and keep only file pointers and findings in the
+   main thread.
 3. Throughput checkpoint stays one line: `throughput checkpoint: n/a, read-only investigation`. The four-item version is for code-shaped work.
 4. Produce the `how`-shaped output (Overview / Key Concepts / How It Works / Where Things Live / Gotchas), or a recommendation with a tradeoffs table if the request is a decision between alternatives.
 5. Apply the **unslop** skill to the reply.

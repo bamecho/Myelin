@@ -80,12 +80,13 @@ for rel in \
   references/plan.zh_CN.md \
   references/handoff-contract.md \
   evals/agent-topology-behavior.md \
+  evals/scout-routing-behavior.md \
   evals/plan-behavior.md \
   evals/portability-behavior.md; do
   check_file "$rel"
 done
 
-for rel in bam-agent.md bam-specialist.md bam-worker.md bam-reviewer.md; do
+for rel in bam-agent.md bam-scout.md bam-specialist.md bam-worker.md bam-reviewer.md; do
   if [ ! -f "$agents_dir/$rel" ]; then
     fail "missing BAM agent role: agents/$rel"
   fi
@@ -103,6 +104,10 @@ runtime_files=(
   "$skill_dir/SKILL.md"
   "$skill_dir/SKILL.zh_CN.md"
   "$skill_dir/playbooks"/*.md
+  "$skills_root/batch-grill-me/SKILL.md"
+  "$skills_root/how/SKILL.md"
+  "$skills_root/why/SKILL.md"
+  "$skills_root/principle-guard-the-context-window/SKILL.md"
 )
 
 if grep -En '(Cursor|composer-2\.5-fast|gpt-5\.5-high-fast|`Task`|/deslop|babysit|create-skill|poteto-agent|control-cli|control-ui|~/\.cursor|multi-phase-plan)' \
@@ -302,6 +307,38 @@ require_pattern "$agents_dir/bam-specialist.md" \
   'one (bounded|assigned) (stage|decision)' \
   'bam-specialist must receive one bounded reasoning responsibility'
 
+reject_pattern "$agents_dir/bam-specialist.md" \
+  '^description:.*investigation' \
+  'bam-specialist must not absorb the Scout evidence-gathering role'
+
+require_pattern "$agents_dir/bam-scout.md" \
+  'model:[[:space:]]*inherit' \
+  'bam-scout must inherit the active host model'
+
+require_pattern "$agents_dir/bam-scout.md" \
+  'readonly:[[:space:]]*true' \
+  'bam-scout must be structurally read-only'
+
+require_pattern "$agents_dir/bam-scout.md" \
+  'one bounded question|one bounded.*slice' \
+  'bam-scout must receive one bounded evidence responsibility'
+
+require_pattern "$agents_dir/bam-scout.md" \
+  'Sources and queries' \
+  'bam-scout must return auditable source coverage'
+
+require_pattern "$agents_dir/bam-scout.md" \
+  'Unknowns' \
+  'bam-scout must expose unresolved evidence gaps'
+
+require_pattern "$agents_dir/bam-scout.md" \
+  'Confidence and caveats' \
+  'bam-scout must calibrate evidence confidence'
+
+require_pattern "$agents_dir/bam-scout.md" \
+  'design the solution' \
+  'bam-scout must not own downstream design decisions'
+
 require_pattern "$agents_dir/bam-worker.md" \
   'single writer' \
   'bam-worker must remain the one writer for its assigned workspace'
@@ -347,6 +384,10 @@ require_pattern "$skill_dir/playbooks/agent-handoff.md" \
   'Stop / escalate' \
   'Agent handoff must define when ownership returns to the parent'
 
+require_pattern "$skill_dir/playbooks/agent-handoff.md" \
+  'Role: <scout.*specialist.*worker.*reviewer>' \
+  'Agent handoff must expose Scout as a bounded receiver role'
+
 reject_pattern "$skill_dir/playbooks/agent-handoff.md" \
   'subagent\(|context:[[:space:]]*"(fresh|fork)"|worktree:[[:space:]]*true|intercom' \
   'Agent handoff must describe host-neutral capabilities, not Pi invocation syntax'
@@ -370,6 +411,59 @@ require_pattern "$skill_dir/playbooks/feature.md" \
 require_pattern "$skill_dir/playbooks/feature.md" \
   'fresh reviewer' \
   'Feature must separate implementation from independent review when risk warrants it'
+
+require_pattern "$skill_dir/playbooks/investigation.md" \
+  'fresh Scouts' \
+  'Investigation must route broad read-only evidence slices to Scout'
+
+require_pattern "$skill_dir/playbooks/investigation.md" \
+  'bounded passes sequentially' \
+  'Investigation must preserve a no-agent-runtime fallback'
+
+require_pattern "$skill_dir/playbooks/design.md" \
+  'Scouts.*gather facts|Scouts first' \
+  'Design must use Scouts for broad evidence rather than design authority'
+
+require_pattern "$skills_root/how/SKILL.md" \
+  'references/scout-prompt\.md' \
+  'How must use the bounded Scout prompt for complex evidence gathering'
+
+require_pattern "$skills_root/how/SKILL.md" \
+  'bounded angles sequentially' \
+  'How must preserve a sequential fallback without Scout runtime support'
+
+reject_pattern "$skills_root/how/SKILL.md" \
+  'explorer agents|explorer-prompt|subagent_type|configured how-.*model' \
+  'How must not restore anonymous explorer agents or fixed host/model bindings'
+
+require_pattern "$skills_root/why/SKILL.md" \
+  'references/scout-prompt\.md' \
+  'Why must use bounded Scouts for evidence categories'
+
+require_pattern "$skills_root/why/SKILL.md" \
+  'sequentially and keep their findings separate' \
+  'Why must preserve evidence coverage without an agent runtime'
+
+reject_pattern "$skills_root/why/SKILL.md" \
+  'investigator-prompt|subagent_type|configured why-.*model|Cursor environment' \
+  'Why must not restore anonymous investigator jobs or fixed host/model bindings'
+
+require_pattern "$skills_root/why/references/source-playbook.md" \
+  'bounded Scout per available evidence category' \
+  'Why source playbooks must route evidence categories through Scout'
+
+require_pattern "$skills_root/batch-grill-me/SKILL.md" \
+  'bounded read-only Scout' \
+  'Batch grill must route environment facts to Scout when useful'
+
+require_pattern "$skills_root/batch-grill-me/SKILL.md" \
+  'otherwise investigate it directly' \
+  'Batch grill must continue without isolated roles'
+
+if [ -e "$skills_root/how/references/explorer-prompt.md" ] || \
+   [ -e "$skills_root/why/references/investigator-prompt.md" ]; then
+  fail "legacy explorer/investigator prompt must be represented by the Scout role"
+fi
 
 if [ "$status" -eq 0 ]; then
   printf 'bam-mode validation passed\n'

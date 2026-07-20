@@ -1,6 +1,9 @@
 # Source playbooks
 
-The why skill spawns one investigator per available evidence category, each reading a single source-specific playbook below. The playbooks are concrete examples for common MCPs; adapt them for a different MCP in the same category.
+The why skill assigns one bounded Scout per available evidence category, each
+reading a single source-specific playbook below. The playbooks are concrete
+examples for common providers; adapt them for a different provider in the same
+category.
 
 | Category | Playbook | Example MCP it documents |
 |---|---|---|

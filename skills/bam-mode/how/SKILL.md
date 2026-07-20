@@ -10,7 +10,7 @@ Explore the codebase to answer "how does X work?" questions. Produce clear archi
 Two modes:
 
 1. **Explain** (default). Explore the codebase and produce a clear explanation
-2. **Critique.** Explain first, then spawn multiple models to independently identify architectural issues
+2. **Critique.** Explain first, then use independent review to identify architectural issues
 
 ## Explain Mode
 
@@ -27,59 +27,57 @@ Identify the scope. If ambiguous, state your best-guess interpretation before ex
 
 **Assess complexity to decide the approach:**
 
-- **Simple** (a single module, a small utility, a narrow question like "how does function X work"): skip explorer agents; the explainer explores and explains in a single pass. Go to Step 2b.
-- **Complex** (a subsystem spanning multiple files/services, a cross-cutting feature, a full architectural overview): spawn parallel explorer agents first, then hand off to the explainer. Go to Step 2a.
+- **Simple** (a single module, a small utility, a narrow question like "how does function X work"): explore and explain directly. Go to Step 2b.
+- **Complex** (a subsystem spanning multiple files/services, a cross-cutting feature, a full architectural overview): gather bounded evidence through Scouts before synthesis when isolated roles are available and useful. Go to Step 2a.
 
-When in doubt, lean simple. You can always spawn explorers if the explainer hits a wall.
+When in doubt, lean simple. A Scout is a context boundary for evidence, not a
+mandatory ceremony.
 
-### Step 2a. Explore (complex questions only)
+### Step 2a. Scout (complex questions only)
 
-Decompose the question into 2-4 parallel exploration angles, each a distinct slice of the subsystem so explorers don't duplicate work. Example split for "how does the rate limiter work?":
+Decompose the question into a few independent evidence angles, each a distinct
+slice of the subsystem so searches do not duplicate work. Example split for
+"how does the rate limiter work?":
 
-- Explorer 1: data model and state management
-- Explorer 2: request path and enforcement
-- Explorer 3: configuration and metrics infrastructure
+- Scout 1: data model and state management
+- Scout 2: request path and enforcement
+- Scout 3: configuration and metrics infrastructure
 
-The right decomposition depends on the question. Use your judgment. Narrow questions: 2 explorers is fine. Broad subsystems: up to 4.
-
-Spawn all explorers in a single message:
-
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explorer model (default `composer-2.5-fast`)
-- `readonly`: `true`
-
-Each explorer gets the same base prompt from `references/explorer-prompt.md` plus a specific exploration angle naming its slice. Each explorer should:
-- Start broad: Glob for relevant directories, Grep for key types/interfaces/class names
+When the host supports isolated roles and the separation saves context, compose
+a bounded Agent job for each fresh Scout. Give it the original question, one
+angle, authoritative repository roots, proof and stop conditions, and the base
+prompt from `references/scout-prompt.md`. Do not select a fixed model, thinking
+level, agent API, or host invocation syntax. Each Scout should:
+- Start broad with the host's available file discovery and text search capabilities
 - Follow the thread: from an entry point, trace the call chain (callers, callees, data flow, type definitions)
 - Read the actual code, don't guess from file names
 - Stop when it can describe the full path from input to output (or trigger to effect) without hand-waving any step
 - Note things that are surprising, non-obvious, or that a newcomer would get wrong
 
-Each explorer returns structured findings: components found, flow traced, files read, anything non-obvious. Overlap between explorers is fine; the explainer reconciles.
+Each Scout returns cited components, flow, files read, boundaries, unknowns, and
+confidence. The Scout gathers facts and does not decide the architecture or
+write the final explanation. When isolated roles are unavailable, run the same
+bounded angles sequentially and preserve the same evidence boundary.
 
 Then proceed to Step 3.
 
 ### Step 2b. Direct Explain (simple questions)
 
-Spawn a single Task subagent that explores and explains in one pass:
-
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explainer model (default `claude-opus-4-8-thinking-xhigh`)
-- `readonly`: `true`
-
-The agent does its own exploration (Glob, Grep, Read) and writes the explanation directly. Read `references/explainer-prompt.md` for the communication style and output format. Same structure, just no explorer findings as input.
+The owning agent explores and explains in one bounded pass. Read
+`references/explainer-prompt.md` for the communication style and output format;
+omit Scout findings because the sources are inspected directly.
 
 Proceed to Step 4.
 
 ### Step 3. Synthesize (complex questions only)
 
-Once all explorers return, spawn a single Task subagent to synthesize their findings into one coherent explanation:
-
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explainer model (default `claude-opus-4-8-thinking-xhigh`)
-- `readonly`: `true`
-
-The explainer gets all explorers' findings and writes the human-facing explanation (output format below). Read `references/explainer-prompt.md` for the full prompt template. The explainer reconciles overlapping findings, resolves contradictions, and weaves the slices into a unified picture.
+Once the Scout findings return, the owner synthesizes them or hands one bounded
+explanation job to a fresh Specialist when a clean decision context materially
+improves the result. Give the synthesizer the original question, cited Scout
+findings, authoritative paths, endpoint, and stop conditions, not Scout working
+transcripts. Read `references/explainer-prompt.md` for the full prompt template.
+The synthesizer reconciles overlap, checks contradictions against source, and
+weaves the slices into one explanation.
 
 ### Step 4. Present
 
@@ -107,16 +105,13 @@ Triggered when the user asks for architectural issues, problems, or improvements
 
 Run the full explain flow above (Steps 1-4). You must understand the architecture before critiquing it.
 
-### Step 2. Spawn Critics
+### Step 2. Review Independently
 
-After the explanation is complete, spawn one architectural critic per model in your configured how-critics list (defaults `claude-opus-4-8-thinking-xhigh`, `gpt-5.5-high-fast`, `composer-2.5-fast`), all in a single message.
-
-For each critic:
-- `subagent_type`: `generalPurpose`
-- `model`: one model from the configured how-critics list. These are minimum reasoning levels. The lead should escalate any model when the architecture warrants deeper analysis.
-- `readonly`: `true`
-
-Read `references/critic-prompt.md` for the prompt template. Each critic gets:
+After the explanation is complete, use one or more fresh Reviewers only when
+independent critique is worth the added context and the host supports it;
+otherwise run separate bounded review passes. Do not prescribe a model family,
+thinking level, or host invocation. Read `references/critic-prompt.md` for the
+prompt template. Each Reviewer gets:
 1. The explanation from Step 1 (so they don't re-explore)
 2. The relevant file paths (so they can read the actual code)
 3. The architectural critique rubric from `references/critique-rubric.md`
