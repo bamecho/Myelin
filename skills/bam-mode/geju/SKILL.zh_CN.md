@@ -6,8 +6,7 @@ description: |
   验证路径（首个证明点 + 证伪条件），以及收尾的一张收益账单，讲清这个方向为什么值得它的代价。当用户想 think bigger、打开设计空间，或挑战保守 / 渐进 /
   过度兼容的方案时使用——即使没点名也要主动触发。触发词：打开格局、格局太小、你格局小了、拔高一点、
   站高一点、别太保守、太碎了、别老想着兼容、别被重构难度绑架、大方向；以及英文 "too incremental /
-  too safe"、"play it bigger"、"greenfield this"、"what if there were no legacy"。一旦大胆方向
-  需要做可行性与落地压力测试，转交 goudi。
+  too safe"、"play it bigger"、"greenfield this"、"what if there were no legacy"。
 ---
 
 # Geju
@@ -127,11 +126,12 @@ description: |
 
 ## 什么时候改用别的 skill
 
-- 大胆方向已经选定，现在需要可行性与落地压力测试——用 `goudi` 让它可执行、给落地降风险。geju 和 goudi 是一对配套姿态：geju 打开格局，goudi 把它踩到地上。
-- 问题是这件事到底值不值得做（做 / 砍 / 延后）——用 `hai-idea`。geju 假定事情值得做，只质疑它的范围和高度。
-- 用户想要实现质量审查——用 `clean-code-reviewer`。
-- 用户想要 APoSD 级别的架构 critique（模块边界、抽象深度）——用 `hai-architecture`。
-- 输出物是 PRD——用 `hai-prd`。
+- 问题是这件事到底值不值得做（做 / 砍 / 延后）——若环境有 `hai-idea` 可用则用它。geju 假定事情值得做，只质疑范围和高度。
+- 用户想要实现质量审查——若有 `clean-code-reviewer` 可用则用它。
+- 用户想要 APoSD 级别的架构 critique——若有 `hai-architecture` 可用则用它。
+- 输出物是 PRD——若有 `hai-prd` 可用则用它。
+
+不要自动调用 `goudi`。落地压力测试仅用户主动点名；geju 自身已有「首个证明点」和「证伪条件」做轻量落地。
 
 ## 这个 skill 不是什么
 

@@ -1,0 +1,6 @@
+{
+  "name": "sync-preview-design-eval",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test" }
+}

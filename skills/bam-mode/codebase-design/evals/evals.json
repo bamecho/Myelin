@@ -1,0 +1,47 @@
+{
+  "skill_name": "codebase-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Read the approved spec, handoff, stale notes, source, exports, callers, and tests. Produce a codebase design for sync preview. Do not implement or write a plan.",
+      "expected_output": "A human-reviewable architecture model that exposes shared plan ownership, preview and execution interaction, semantic interfaces, caller knowledge, and the chosen boundary without full function bodies.",
+      "files": ["fixtures/sync-preview"],
+      "assertions": [
+        "Grounds the current model in actual modules and public exports",
+        "Makes shared filtering and ordering ownership explicit",
+        "Explains preview and execution control/data flow and client avoidance",
+        "States interface semantics and caller knowledge, not only signatures",
+        "Rejects stale command, plugin, config, and TypeScript proposals",
+        "Contains no full function implementation"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Read the approved spec, handoff, stale notes, package exports, source, callers, and tests. Produce a codebase design for billing preview. Infer compatibility from code. Do not implement or write a plan.",
+      "expected_output": "A human-reviewable architecture model that preserves independent published contracts, exposes shared charge-plan ownership and gateway interaction, and rejects the stale monolith and adapter design.",
+      "files": ["fixtures/billing-preview"],
+      "assertions": [
+        "Infers public normalize and select contracts from package exports and tests",
+        "Keeps normalization and selection independent from billing orchestration",
+        "Explains preview and execution interaction through one charge-plan policy",
+        "States semantic interface and caller-knowledge changes",
+        "Rejects BillingEngine, Stripe adapters, test deletion, and TypeScript migration",
+        "Contains no full function implementation"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Revise the existing sync-preview design after this human correction: SyncPlanner must be an independent logical module because a future scheduled job is a third caller. The CLI and sync executor both consume plan(records). The planner knows nothing about stdout or the client. Public exports remain unchanged. Do not implement code or write a plan.",
+      "expected_output": "A revised architecture model that applies the corrected module and exact interface without reopening alternatives, inventing rationale, or specifying unconfirmed scheduled-job behavior.",
+      "files": ["fixtures/sync-preview"],
+      "assertions": [
+        "Uses an independent SyncPlanner with the exact plan(records) interface",
+        "Makes CLI and executor consume the planner without planner I/O knowledge",
+        "Preserves existing public exports",
+        "Does not reopen the corrected choice with alternatives or retroactive rationale",
+        "Does not invent scheduled-job execution behavior",
+        "Contains no full function implementation"
+      ]
+    }
+  ]
+}

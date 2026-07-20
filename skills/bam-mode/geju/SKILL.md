@@ -8,8 +8,7 @@ description: |
   conservative / incremental / over-compatible proposal — proactively, even when unnamed. Triggers:
   打开格局, 格局太小, 你格局小了, 拔高一点, 站高一点, 别太保守, 太碎了, 别老想着兼容,
   别被重构难度绑架, 大方向; and English "too incremental / too safe", "play it bigger",
-  "greenfield this", "what if there were no legacy". Once the bold direction needs feasibility /
-  landing pressure-testing, route to goudi.
+  "greenfield this", "what if there were no legacy".
 ---
 
 # Geju
@@ -129,11 +128,12 @@ Output discipline that the sections do not already enforce:
 
 ## Use a different skill when
 
-- The bold direction is chosen and now needs feasibility / landing pressure-testing — use `goudi` to make it executable and de-risk landing. geju and goudi are a paired stance: geju opens the frame, goudi puts it on the ground.
-- The question is whether the idea is worth doing at all (do / kill / defer) — use `hai-idea`. geju assumes the work is worth doing and questions only its scope and altitude.
-- The user wants implementation-quality review — use `clean-code-reviewer`.
-- The user wants APoSD-level architecture critique (module boundaries, abstraction depth) — use `hai-architecture`.
-- The output is a PRD — use `hai-prd`.
+- The question is whether the idea is worth doing at all (do / kill / defer) — use `hai-idea` when that skill is available. geju assumes the work is worth doing and questions only its scope and altitude.
+- The user wants implementation-quality review — use `clean-code-reviewer` when available.
+- The user wants APoSD-level architecture critique (module boundaries, abstraction depth) — use `hai-architecture` when available.
+- The output is a PRD — use `hai-prd` when available.
+
+Do not auto-invoke `goudi`. Landing pressure-test is user-invoked only; geju already ships First Proof Point and Falsifier for a light ground check.
 
 ## What this skill is NOT
 

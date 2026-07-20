@@ -1,0 +1,369 @@
+{
+  "metadata": {
+    "skill_name": "codebase-design",
+    "skill_path": "codebase-design/SKILL.md",
+    "executor_model": "Gemini 3.5 Flash (High) via agy",
+    "analyzer_model": "Codex (Terra)",
+    "timestamp": "2026-07-17T10:15:00Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Grounds the current model in actual modules and public exports",
+          "passed": true,
+          "evidence": "The module table names cli.js, sync.js, client.js, index.js and the run/createClient/syncSessions exports."
+        },
+        {
+          "text": "Makes shared filtering and ordering ownership explicit",
+          "passed": true,
+          "evidence": "getSyncPlan owns active filtering and ID sorting."
+        },
+        {
+          "text": "Explains preview and execution flow and client avoidance",
+          "passed": true,
+          "evidence": "The diagram and implementation show dry-run bypassing the client."
+        },
+        {
+          "text": "States interface semantics and caller knowledge",
+          "passed": true,
+          "evidence": "JSDoc and invariants describe inputs, returns, and compatibility."
+        },
+        {
+          "text": "Does not adopt stale command, plugin, config, or TypeScript proposals",
+          "passed": true,
+          "evidence": "The output keeps JavaScript and the current command with no plugin or config system."
+        },
+        {
+          "text": "Contains no full function implementation",
+          "passed": false,
+          "evidence": "The output includes complete implementations of getSyncPlan, syncSessions, and run."
+        }
+      ],
+      "notes": [
+        "The artifact pre-implements three functions, reducing implementation freedom."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Infers public normalize and select contracts",
+          "passed": true,
+          "evidence": "The invariants preserve the ./normalize and ./select package exports."
+        },
+        {
+          "text": "Keeps normalization and selection independent from billing orchestration",
+          "passed": true,
+          "evidence": "The module table retains normalize.js and select.js as independent utilities."
+        },
+        {
+          "text": "Shares one charge-plan policy between preview and execution",
+          "passed": true,
+          "evidence": "billInvoices calls previewBilling in the target flow."
+        },
+        {
+          "text": "States semantic interfaces and caller-visible behavior",
+          "passed": false,
+          "evidence": "The interface is written as TypeScript despite the JavaScript-only requirement and omits current validation/error semantics."
+        },
+        {
+          "text": "Does not adopt BillingEngine, Stripe adapters, test deletion, or TypeScript migration",
+          "passed": true,
+          "evidence": "The design rejects wrappers and keeps existing modules and tests."
+        },
+        {
+          "text": "Contains no full function implementation",
+          "passed": true,
+          "evidence": "The code block contains signatures only."
+        }
+      ],
+      "notes": [
+        "TypeScript declarations conflict with the JavaScript constraint."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses an independent SyncPlanner with exact plan(records) interface",
+          "passed": true,
+          "evidence": "The target diagram and planner.js use plan(records)."
+        },
+        {
+          "text": "Makes CLI and executor consume the planner without planner I/O knowledge",
+          "passed": true,
+          "evidence": "Both import plan and the planner is documented as pure."
+        },
+        {
+          "text": "Explicitly preserves existing public exports",
+          "passed": true,
+          "evidence": "The invariants name run, createClient, and syncSessions as unchanged exports."
+        },
+        {
+          "text": "Does not reopen the corrected choice with alternatives or retroactive rationale",
+          "passed": true,
+          "evidence": "No competing alternative is presented."
+        },
+        {
+          "text": "Contains no full function implementation",
+          "passed": false,
+          "evidence": "The artifact includes complete implementations for planner, syncSessions, and run."
+        },
+        {
+          "text": "Does not invent scheduled-job execution behavior",
+          "passed": true,
+          "evidence": "The scheduled job is shown only as a caller of plan(records)."
+        }
+      ],
+      "notes": [
+        "The artifact implements the corrected design rather than leaving local code choices open."
+      ]
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Grounds the current model in actual modules and public exports",
+          "passed": false,
+          "evidence": "The design names cli.js and sync.js and preserves syncSessions, but does not name the existing run/createClient/syncSessions export set."
+        },
+        {
+          "text": "Makes shared filtering and ordering ownership explicit",
+          "passed": true,
+          "evidence": "planSync owns active filtering and ascending ID ordering."
+        },
+        {
+          "text": "Explains preview and execution flow and client avoidance",
+          "passed": true,
+          "evidence": "The dry-run sequence calls planSync and stdout directly; syncSessions alone calls client.apply."
+        },
+        {
+          "text": "States interface semantics and caller knowledge",
+          "passed": true,
+          "evidence": "The contracts state purity, non-mutation, ordering, sequential client calls, and return semantics."
+        },
+        {
+          "text": "Does not adopt stale command, plugin, config, or TypeScript proposals",
+          "passed": true,
+          "evidence": "The design keeps the existing command modules and JavaScript interfaces and introduces no plugin or config system."
+        },
+        {
+          "text": "Contains no full function implementation",
+          "passed": true,
+          "evidence": "All code blocks contain declaration signatures only."
+        }
+      ],
+      "notes": [
+        "The export set is preserved downstream but not fully named in the design artifact."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Infers public normalize and select contracts",
+          "passed": true,
+          "evidence": "The design preserves package subpath callers for normalizeInvoice and selectBillable."
+        },
+        {
+          "text": "Keeps normalization and selection independent from billing orchestration",
+          "passed": true,
+          "evidence": "normalize.js and select.js retain separate responsibilities and interfaces."
+        },
+        {
+          "text": "Shares one charge-plan policy between preview and execution",
+          "passed": true,
+          "evidence": "billInvoices calls previewBilling and then executes the returned charge plan."
+        },
+        {
+          "text": "States semantic interfaces and caller-visible behavior",
+          "passed": true,
+          "evidence": "The declarations state purity, validation errors, charge plan shape, promise return, and sequential gateway interaction."
+        },
+        {
+          "text": "Does not adopt BillingEngine, Stripe adapters, test deletion, or TypeScript migration",
+          "passed": true,
+          "evidence": "The design keeps functional JavaScript modules and existing test-facing contracts with no adapters."
+        },
+        {
+          "text": "Contains no full function implementation",
+          "passed": true,
+          "evidence": "The code block contains declaration signatures only."
+        }
+      ],
+      "notes": [
+        "The async billInvoices @throws notation should be read as promise rejection, not a synchronous caller throw."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses an independent SyncPlanner with exact plan(records) interface",
+          "passed": true,
+          "evidence": "planner.js owns pure planning and declares export function plan(records)."
+        },
+        {
+          "text": "Makes CLI and executor consume the planner without planner I/O knowledge",
+          "passed": true,
+          "evidence": "Both flows call plan(records), and the planner knows no stdout or client."
+        },
+        {
+          "text": "Explicitly preserves existing public exports",
+          "passed": false,
+          "evidence": "The revised artifact keeps public signatures but does not name the full run/createClient/syncSessions export set."
+        },
+        {
+          "text": "Does not reopen the corrected choice with alternatives or retroactive rationale",
+          "passed": true,
+          "evidence": "The output contains only the revised model, contracts, and interaction view."
+        },
+        {
+          "text": "Contains no full function implementation",
+          "passed": true,
+          "evidence": "All code blocks contain declaration signatures only."
+        },
+        {
+          "text": "Does not invent scheduled-job execution behavior",
+          "passed": true,
+          "evidence": "The scheduled job only requests and receives plan(records); no client or transport effect is assigned."
+        }
+      ],
+      "notes": [
+        "The full package export set is implied rather than restated."
+      ]
+    }
+  ],
+  "run_summary": {
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.8333,
+        "stddev": 0.0,
+        "min": 0.8333,
+        "max": 0.8333
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.8889,
+        "stddev": 0.0962,
+        "min": 0.8333,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.0556",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "The aggregate gain is small because both versions preserve core behavior; the material qualitative gain is removal of full implementations from sync and correction artifacts.",
+    "The candidate still omits the complete package export set in two sync artifacts; downstream implementation nevertheless preserved index.js exactly and passed both executable tests.",
+    "Loading adjacent deepeners caused a fake-client regression in iteration 9; the final candidate removes those runtime documents and prevents adjacent evaluation history from entering normal design context."
+  ]
+}

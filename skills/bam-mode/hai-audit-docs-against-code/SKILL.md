@@ -89,5 +89,5 @@ audits, deduplicate issues and normalize severity.
 ## Use a different skill when
 
 - The comparison is doc-vs-doc with no codebase as truth source (internal contradictions, stale sections, duplication) — use `hai-audit-docs-internally`.
-- You are auditing entity/data-model fields against a PRD (which fields exist, store-vs-compute, column-vs-config) — use `entity-model-auditor`.
+- You are designing entity/data-model fields from a confirmed spec (which fields exist, store-vs-compute, column-vs-config) — use `entity-model-design`.
 - The document has drifted from the discussion conclusions and the user wants it rewritten, not a mismatch report — use `hai-rewrite-doc`.
