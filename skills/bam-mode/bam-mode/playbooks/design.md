@@ -46,8 +46,9 @@ request returns to Feature after this playbook produces a taskable handoff.
      to compare concrete candidates. Keep Design code-free; hand empirical
      prototypes to the Prototype playbook.
    Keep interactive intent and user authority with the owner. Broad independent
-   evidence gathering may use bounded fresh specialists, but the owner
-   synthesizes their findings into Handoff Locked/Open before the next stage.
+   evidence gathering may use bounded fresh Scouts, but the owner synthesizes
+   their cited findings into Handoff Locked/Open before the next stage. Scouts
+   gather facts; they do not choose the product, entity, or codebase design.
 3. **Resolve the entity model when it changes.** Run `entity-model-design` when
    the work adds or changes business facts, fields, store/compute/remove choices,
    lifecycle, uniqueness, schema ownership, or migration meaning. It consumes
@@ -59,10 +60,11 @@ request returns to Feature after this playbook produces a taskable handoff.
    entity model only. Treat retry here as a lifecycle identity/invariant; retry
    language alone does not pull execution principles into the entity step. This
    does not authorize types, modules, or implementation.
-   When entity work requires a broad schema and lifecycle read, hand this stage
-   to a fresh specialist after the owner locks its product inputs. Accept the
-   returned entity artifact before codebase design; do not pass its raw working
-   context forward.
+   When entity work requires a broad schema and lifecycle read, use bounded
+   Scouts first when that reading would pollute the design context, then hand
+   the cited evidence and locked product inputs to a fresh specialist. Accept
+   the returned entity artifact before codebase design; do not pass Scout or
+   specialist working transcripts forward.
 4. **Resolve the codebase design when it changes.** Run `codebase-design` after
    the entity stage when the work changes module ownership, interactions, public
    interfaces, seam placement, or caller knowledge. It consumes the approved
@@ -77,10 +79,12 @@ request returns to Feature after this playbook produces a taskable handoff.
    - When concurrent actors could write the same state, apply
      `principle-separate-before-serializing-shared-state` before accepting a
      shared writer.
-   Prefer a fresh specialist when this stage must read different callers,
-   contracts, and module boundaries than the entity stage. It receives the
-   approved Handoff and entity artifact, then returns one reviewable codebase
-   design without reopening product or data decisions.
+   Prefer a fresh specialist when this stage needs a different decision context
+   than the entity stage. When callers, contracts, and module boundaries require
+   broad source discovery, give bounded slices to Scouts first. The specialist
+   receives their cited findings, authoritative paths, approved Handoff, and
+   entity artifact, then returns one reviewable codebase design without
+   reopening product or data decisions.
 5. **Choose the execution artifact.** Follow `../references/plan.md`. An explicit
    plan request produces `note` or `full`. An implementation request uses `none`
    when the approved decisions already make one single-agent slice taskable,

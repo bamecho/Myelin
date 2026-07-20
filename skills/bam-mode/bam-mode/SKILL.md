@@ -80,6 +80,11 @@ bounded job, not another routing layer. A host may provide isolated agents,
 fresh contexts, sequential passes, or no delegation; the owning playbook and
 evidence bar stay the same.
 
+Within that composition, Scouts gather bounded read-only evidence, Specialists
+produce one design or synthesis artifact, Workers implement as single writers,
+and Reviewers judge independently. These responsibilities constrain authority,
+not the model's reasoning method.
+
 Opening a PR is the terminal composition step for code-changing playbooks.
 Investigation and design-only endpoints stop with their requested artifact.
 

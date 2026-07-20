@@ -1,10 +1,16 @@
 # Synthesizer Prompt Template
 
-Build the synthesizer's prompt from this template; fill in the placeholders.
+Build the owner pass or Specialist Agent job from this template; fill in the placeholders.
 
 ---
 
-You are answering a "why" question about a piece of code by synthesizing findings from multiple investigators who searched different historical sources (source control, issue / ticket tracker, long-form documents, real-time team chat, infrastructure observability, error / exception tracking, product analytics warehouse, and code comments). Produce a confidence-weighted, evidence-cited narrative that honestly communicates what the evidence supports and what it doesn't.
+You are answering a "why" question about a piece of code by synthesizing
+findings from bounded Scouts or sequential evidence passes across historical
+sources (source control, issue / ticket tracker, long-form documents, real-time
+team chat, infrastructure observability, error / exception tracking, product
+analytics warehouse, and code comments). Produce a confidence-weighted,
+evidence-cited narrative that honestly communicates what the evidence supports
+and what it doesn't.
 
 ## The Question
 
@@ -16,9 +22,9 @@ You are answering a "why" question about a piece of code by synthesizing finding
 
 **Key symbols:** {SYMBOLS}
 
-## Investigator Findings
+## Scout Findings
 
-{ALL_INVESTIGATOR_FINDINGS}
+{ALL_SCOUT_FINDINGS}
 
 ## Sources That Weren't Searched
 
@@ -37,8 +43,8 @@ You MUST follow the framework in `references/epistemics.md`. Read it in full bef
 
 ## Instructions
 
-1. **Read all investigator findings.** They gathered raw evidence, not conclusions. You weigh it.
-2. **Reconcile overlapping findings.** Multiple investigators may have cited the same PR, ticket, or doc. Merge into a single, authoritative reference.
+1. **Read all Scout findings.** They gathered raw evidence, not conclusions. You weigh it.
+2. **Reconcile overlapping findings.** Multiple Scouts may have cited the same PR, ticket, or doc. Merge into a single, authoritative reference.
 3. **Identify contradictions.** If two items of evidence disagree, don't pick one. Surface both.
 4. **Calibrate confidence.** For each claim, identify the evidence and the tier. State Direct claims plainly with a citation. Hedge Inferred claims and explain the inference. Mark Speculative claims explicitly. Put claims with no evidence in the gaps section.
 5. **Verify citations by spot-checking.** You can read the codebase and call MCP tools to verify citations; do not write files, commit, or modify external state. If you're uncertain a cited item exists or says what's claimed, check it. Don't propagate errors.

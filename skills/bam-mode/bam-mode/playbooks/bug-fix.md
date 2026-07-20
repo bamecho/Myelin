@@ -12,6 +12,9 @@ Be scientific. Every shipped line traces to runtime evidence. Belt-and-suspender
    This is the canonical **principle-sequence-verifiable-units** skill, the failing test first and the fix on top.
 6. Run **Opening a PR**.
 
-Investigation may run `how` + `why` in parallel when independent workers are available; otherwise run both passes sequentially and preserve the same evidence boundary.
+Investigation may run bounded `how` and `why` evidence slices through fresh
+Scouts when isolated roles are available; otherwise run the same passes
+sequentially and preserve their evidence boundaries. The Bug fix owner keeps
+the causal model and does not delegate the final root-cause judgment.
 
 **Reply:** what was broken, root cause, fix, how you verified. Paste failing-then-passing repro output verbatim.

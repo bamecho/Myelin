@@ -4,7 +4,14 @@
 
 A pickup is inheritance. The prior agent already paid the cost of reading the code, running the repros, making the design choices. Redoing loses the bias check and burns context. Resist the urge to re-derive; read.
 
-1. Locate the prior trail from a path or URL supplied by the user or active host, a transcript explicitly scoped to the current workspace, a resume note, or a pushed branch. Never search global agent-history directories or unrelated workspaces. Read the metadata overview and last messages first, then scan back for the decision points. Parse a long transcript in an isolated worker when available, or in bounded local passes otherwise, and keep the reduced timeline in the main thread (the **principle-guard-the-context-window** skill).
+1. Locate the prior trail from a path or URL supplied by the user or active
+   host, a transcript explicitly scoped to the current workspace, a resume note,
+   or a pushed branch. Never search global agent-history directories or
+   unrelated workspaces. Read the metadata overview and last messages first,
+   then scan back for the decision points. Parse a long transcript in a fresh
+   Scout when available and useful, or in bounded local passes otherwise, and
+   keep the reduced cited timeline in the main thread (the
+   **principle-guard-the-context-window** skill).
 2. Reconstruct operational state. The branch and worktree, what already landed (`git log`, `git diff` against the base), the open todos, the decisions made. The prior trail is authoritative input. Resist the bias to re-derive it.
 3. Diff done vs pending. Compare what shipped against what was planned, name the resume point, do not re-run the prior repro or redo completed work.
 4. Route the remaining work to the matching playbook and pick the verdict: continue the execution, ship a finished recommendation, ratify or override a prior conclusion, or postmortem a failed run. The pickup playbook ends here; the routed playbook owns the rest.
