@@ -1,0 +1,11 @@
+{
+  "name": "billing-preview-design-eval",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./normalize": "./src/normalize.js",
+    "./select": "./src/select.js"
+  },
+  "scripts": { "test": "node --test" }
+}
