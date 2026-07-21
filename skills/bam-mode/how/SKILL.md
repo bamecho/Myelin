@@ -118,7 +118,8 @@ prompt template. Each Reviewer gets:
 
 ### Step 3. Lead Judgment
 
-Same framework as the interrogate skill. You're a pragmatic lead, not an aggregator.
+Same framework as Use skill `interrogate`. You're a pragmatic lead, not an
+aggregator.
 
 Categorize findings:
 - **Act on.** Architectural problems worth fixing now

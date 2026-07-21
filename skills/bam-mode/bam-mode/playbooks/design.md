@@ -8,10 +8,10 @@ The complete flow is `think` -> `entity-model-design` -> `codebase-design` -> pl
 The middle stages are conditional, and plan may be `none`; one skipped
 stage never licenses another stage to make its decisions silently.
 
-Principles are risk-triggered lenses, not stages or a checklist. Load one only
-when the current step exposes its named risk, and use it to change a decision or
-check in that step. A principle cannot widen the step's responsibility. Do not
-record skipped principles or list unused candidates.
+Principles are risk-triggered lenses, not stages or a checklist. Use a principle
+skill only when the current step exposes its named risk, and use it to change a
+decision or check in that step. A principle cannot widen the step's
+responsibility. Do not record skipped principles or list unused candidates.
 
 The playbook owner and the agent context are different concerns. Keep one owner
 for user authority, Handoff, and stage acceptance. Compose **Agent handoff** from
@@ -31,52 +31,54 @@ request returns to Feature after this playbook produces a taskable handoff.
    an approved design, a plan, or implementation after design. Stop at that
    endpoint. Do not produce later artifacts merely to complete this flow.
 2. **Think and ground.** Read the current repository, governing instructions,
-   prior decisions, and live external contracts that bear on the choice. Use
-   `think` to establish the goal, success evidence, constraints, non-goals, and
-   open decisions. Explore materially different alternatives when the choice is
-   open. The reasoning method and presentation are adaptive; only the decision,
-   evidence, uncertainty, and falsifier must survive. Draft or refresh the
-   Handoff contract from `../references/handoff-contract.md`.
-   - When product experience or feature scope is the choice, apply
+   prior decisions, and live external contracts that bear on the choice.
+   Use skill `think` to establish the goal, success evidence, constraints,
+   non-goals, and open decisions. Explore materially different alternatives when
+   the choice is open. The reasoning method and presentation are adaptive; only
+   the decision, evidence, uncertainty, and falsifier must survive. Draft or
+   refresh the Handoff contract from `../references/handoff-contract.md`.
+   - When product experience or feature scope is the choice, Use skill
      `principle-experience-first` to judge the target from the consumer's seat.
-   - When a foundational new requirement enters an existing design, apply
+   - When a foundational new requirement enters an existing design, Use skill
      `principle-redesign-from-first-principles` so the target is not a bolt-on.
    - When a novel interaction or architecture choice has no repository precedent
-     and several viable shapes remain, apply `principle-exhaust-the-design-space`
-     to compare concrete candidates. Keep Design code-free; hand empirical
-     prototypes to the Prototype playbook.
+     and several viable shapes remain, Use skill
+     `principle-exhaust-the-design-space` to compare concrete candidates. Keep
+     Design code-free; hand empirical prototypes to the Prototype playbook.
    Keep interactive intent and user authority with the owner. Broad independent
    evidence gathering may use bounded fresh Scouts, but the owner synthesizes
    their cited findings into Handoff Locked/Open before the next stage. Scouts
    gather facts; they do not choose the product, entity, or codebase design.
-3. **Resolve the entity model when it changes.** Run `entity-model-design` when
-   the work adds or changes business facts, fields, store/compute/remove choices,
-   lifecycle, uniqueness, schema ownership, or migration meaning. It consumes
-   only Handoff Locked decisions and leaves unresolved product choices Open.
-   Record `entity-model-design skipped: <reason>` when no such decision exists.
-   Approved data decisions become Locked before module design begins.
+3. **Resolve the entity model when it changes.** Use skill `entity-model-design`
+   when the work adds or changes business facts, fields, store/compute/remove
+   choices, lifecycle, uniqueness, schema ownership, or migration meaning. It
+   consumes only Handoff Locked decisions and leaves unresolved product choices
+   Open. Record `entity-model-design skipped: <reason>` when no such decision
+   exists. Approved data decisions become Locked before module design begins.
    When lifecycle variants, synchronized flags, or repeated shape assumptions
-   could admit contradictory states, apply `principle-model-the-domain` to the
-   entity model only. Treat retry here as a lifecycle identity/invariant; retry
-   language alone does not pull execution principles into the entity step. This
-   does not authorize types, modules, or implementation.
+   could admit contradictory states, Use skill `principle-model-the-domain` for
+   the entity model only. Treat retry here as a lifecycle identity/invariant;
+   retry language alone does not pull execution principles into the entity step.
+   This does not authorize types, modules, or implementation.
    When entity work requires a broad schema and lifecycle read, use bounded
    Scouts first when that reading would pollute the design context, then hand
    the cited evidence and locked product inputs to a fresh specialist. Accept
    the returned entity artifact before codebase design; do not pass Scout or
    specialist working transcripts forward.
-4. **Resolve the codebase design when it changes.** Run `codebase-design` after
-   the entity stage when the work changes module ownership, interactions, public
-   interfaces, seam placement, or caller knowledge. It consumes the approved
-   entity model when present. Record `codebase-design skipped: <reason>` for an
-   obvious one-owner change. Use `architect` only when the approved module model
-   still needs exact types, signatures, or module scaffolding before execution.
+4. **Resolve the codebase design when it changes.** Use skill `codebase-design`
+   after the entity stage when the work changes module ownership, interactions,
+   public interfaces, seam placement, or caller knowledge. It consumes the
+   approved entity model when present. Record
+   `codebase-design skipped: <reason>` for an obvious one-owner change. Use
+   skill `architect` only when the approved module model still needs exact types,
+   signatures, or module scaffolding before execution.
    - When raw external input, validation, adapters, or error ownership cross the
-     boundary, apply `principle-boundary-discipline` to place parsing and guards.
-   - When a proposed layer or hidden state makes callers harder to trace, apply
-     `principle-minimize-reader-load` and require the boundary to remove at least
-     as much indirection as it adds.
-   - When concurrent actors could write the same state, apply
+     boundary, Use skill `principle-boundary-discipline` to place parsing and
+     guards.
+   - When a proposed layer or hidden state makes callers harder to trace, Use
+     skill `principle-minimize-reader-load` and require the boundary to remove at
+     least as much indirection as it adds.
+   - When concurrent actors could write the same state, Use skill
      `principle-separate-before-serializing-shared-state` before accepting a
      shared writer.
    Prefer a fresh specialist when this stage needs a different decision context
@@ -91,14 +93,14 @@ request returns to Feature after this playbook produces a taskable handoff.
    `note` when Goal/Verify/Stop adds missing execution information, and `full`
    only for coordination, meaningful intermediate states, migrations, or heavy
    stop rules. A recommendation or design-only request stops without a plan.
-   - For multi-step sweeps or migrations, apply
+   - For multi-step sweeps or migrations, Use skill
      `principle-sequence-verifiable-units`; every unit must end in a real check.
    - For execution steps that may retry, restart, or resume after a partial run,
-     apply `principle-make-operations-idempotent` and include the convergence
-     check.
-   - For planned rewrites or migrations with explicit phase boundaries, apply
-     `principle-outcome-oriented-execution` to preserve the approved target and
-     name where temporary breakage is allowed and verified.
+     Use skill `principle-make-operations-idempotent` and include the
+     convergence check.
+   - For planned rewrites or migrations with explicit phase boundaries, Use
+     skill `principle-outcome-oriented-execution` to preserve the approved
+     target and name where temporary breakage is allowed and verified.
    A `full` coordination plan may use a fresh specialist when it needs a clean
    owner/dependency view. `none` and `note` normally stay with the owner; do not
    create a planning agent merely to complete the sequence.

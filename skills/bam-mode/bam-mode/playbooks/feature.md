@@ -14,13 +14,15 @@ prove the behavior. Design work has one owner: the **Design** playbook at
    and system boundary before tasking. If implementation exposes a missing
    entity or ownership decision, return to Design instead of deciding it inside
    the diff. For external input, framework adapters, API contracts, persistence,
-   or validation, apply the **principle-boundary-discipline** and
-   **principle-type-system-discipline** skills: parse at boundaries, keep
-   business logic typed, and do not lie to the compiler.
+   or validation, Use skill `principle-boundary-discipline` and Use skill
+   `principle-type-system-discipline`: parse at boundaries, keep business logic
+   typed, and do not lie to the compiler.
 3. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
    - **Blocking first steps.** Gates run before fan-out.
    - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.
-   - **Shared mutable state.** Default to splitting the target (the **principle-separate-before-serializing-shared-state** skill). Serialize only for real invariants.
+   - **Shared mutable state.** Default to splitting the target (Use skill
+     `principle-separate-before-serializing-shared-state`). Serialize only for
+     real invariants.
    - **Smallest safe decomposition.** If one worker is best, name why.
 4. Choose the execution topology from the checkpoint. One owner is the default,
    and one writable state has one active **single writer**. Fan out only disjoint
@@ -32,7 +34,7 @@ prove the behavior. Design work has one owner: the **Design** playbook at
    commands run with observed results, verification evidence, anything left undone,
    and residual risks. Its completion returns ownership to Feature and is
    not final completion. When several valid implementation shapes
-   would materially change the result, use the **arena** skill or an equivalent
+   would materially change the result, Use skill `arena` or an equivalent
    isolated candidate-and-review pass. The host may map these roles to agents,
    models, or sequential passes. The rule is that missing delegation support never blocks implementation.
    Comments per **Comments**. Make surgical edits, re-ground
@@ -52,10 +54,11 @@ prove the behavior. Design work has one owner: the **Design** playbook at
    the owner context. Missing review infrastructure does not block the task or
    lower its proof bar.
 7. Rebase into small, ordered commits; stack follow-ups.
-   Use the **principle-sequence-verifiable-units** skill, building, verifying, and committing each small unit before the next.
+   Use skill `principle-sequence-verifiable-units`, building, verifying, and
+   committing each small unit before the next.
 8. If the implementation contradicts an approved design, return to Design. If
-   the implementation is contested within that design, `interrogate` before
-   shipping.
+   the implementation is contested within that design, Use skill `interrogate`
+   before shipping.
 9. Run **Opening a PR**.
 
 Code-coupled work (one feature, one migration) goes to a single owner with the

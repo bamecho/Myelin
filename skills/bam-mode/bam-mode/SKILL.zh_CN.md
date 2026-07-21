@@ -24,6 +24,12 @@ playbook handoff。本文件不再临场拼第二套流程。
 能完整负责目标结果的最窄 playbook 胜出。只选一个 owner；playbook 组合只发生在
 owner 内部，不在顶层列 skill 清单。
 
+选定 owning playbook 后，告诉用户当前用的是哪一个（以及后来组合了哪个）。
+一句话就够，不要倾倒未选中的候选。
+
+步骤点名其他 skill 时，写成 Load skill X 或 Use skill X，并打开该 skill 的
+SKILL.md。用软复述代替打开文件不算。
+
 ## Playbooks
 
 先匹配下面的 playbook。打开本 skill 目录下对应文件，把步骤原样复制进 todolist，再加入任务特定 todo。跳过的步骤也留在列表里，并写 `skip: <reason>`。

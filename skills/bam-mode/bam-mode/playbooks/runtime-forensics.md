@@ -6,8 +6,8 @@
 2. Reduce the artifact to the smoking gun: the function on the hot path, the
    retainer chain from the leaked object to a GC root, the loop firing without
    input. Parse a large read-only artifact in a fresh Scout when available and
-   useful, or in bounded local passes otherwise (the
-   **principle-guard-the-context-window** skill). Keep the reduced cited finding,
+   useful, or in bounded local passes otherwise (Use skill
+   `principle-guard-the-context-window`). Keep the reduced cited finding,
    not the raw artifact transcript, in the main thread.
 3. Prove the mechanism before believing it. Inject instrumentation via CDP eval on the running process, or hotfix the live code without reloading, to confirm the hypothesis cheaply.
 4. Map the finding back to source: file, symbol, the line that allocates or schedules.
