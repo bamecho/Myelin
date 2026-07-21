@@ -33,6 +33,13 @@ Route by the user's requested outcome and current state:
 The narrowest playbook that owns the requested endpoint wins. Select one owner;
 playbook composition happens inside that owner, never as a top-level skill list.
 
+When the owning playbook is selected, tell the user which one it is (and any
+playbook it later composes). One line is enough. Do not dump unselected
+candidates.
+
+When a step names another skill, say Load skill X or Use skill X and open that
+skill's SKILL.md. Soft paraphrase of the skill's intent is not a substitute.
+
 ## Playbooks
 
 Match the task to one playbook below. Open the referenced file in this skill directory and copy its steps verbatim into the todolist before task-specific todos. A skipped step stays in the list with `skip: <reason>`.
