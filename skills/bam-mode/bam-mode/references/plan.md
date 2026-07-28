@@ -50,6 +50,19 @@ For a `full` plan, each independently mergeable execution unit gets a stable
 that cannot land or verify independently is not a separate slice; keep it in
 the same unit.
 
+Before accepting a slice, enforce two gates:
+
+- **Context gate:** one agent can execute it from named sources in a fresh
+  working context without reconstructing broad design history. Split unrelated
+  outcomes, unresolved ownership, or work whose proof depends on a later slice.
+- **Oracle gate:** verification directly observes the approved outcome and can
+  distinguish it from the material plausible ways the result could be wrong. A
+  command that exits zero without making that distinction is not sufficient.
+
+Use skill `design-verifiable-slices` when either gate is not already obvious
+from the approved sources. It selects checks from the actual failure model; it
+does not add every available test type to the plan.
+
 ## 3. Choose the location
 
 Use the user's path when supplied. Otherwise return a `note` in chat or follow
@@ -74,7 +87,7 @@ Slice: `S1` <name>
 <The change or short ordered sequence not already obvious from the sources.>
 
 ## Verify
-- <Command or real-artifact check.>
+- <Direct check that distinguishes the approved outcome from material failure.>
 
 ## Stop if
 - <Condition that requires a product/design decision or plan revision.>
@@ -112,6 +125,8 @@ choices to the executor when the spec and design do not constrain them.
 - Do not change module ownership or interfaces in the plan. Return to
   codebase-design if the execution sequence exposes a design problem.
 - Acceptance states an observable result. Verify names the check that proves it.
+- Build, type, lint, snapshot, and coverage results prove only the properties
+  they directly observe; none is a generic substitute for behavioral evidence.
 - Do not execute while drafting the requested plan.
 
 ## 6. Prepare ticket mapping when requested

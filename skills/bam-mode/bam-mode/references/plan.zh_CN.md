@@ -38,6 +38,17 @@ Outcome: <可观察结果>
 `Goal`、`Depends on`、`Verify`、`Stop if`。不能独立落地或验证的内容不是单独 slice，
 留在同一单元。
 
+接受一个 slice 前执行两个 gate：
+
+- **Context gate：** 一个 agent 能在 fresh working context 中，仅根据 named sources
+  完成它，不需要重建大范围 design 历史。无关 outcome、未决 ownership，或必须依赖后续
+  slice 才能证明的工作都要拆分。
+- **Oracle gate：** verification 直接观察已批准 outcome，并能把它与 material 且可信的
+  错误结果区分开。一个没有做出这种区分、只是退出码为零的命令不够。
+
+任一 gate 无法直接从已批准 source 判断时，使用 skill `design-verifiable-slices`。它根据
+真实 failure model 选择 checks，不把所有测试类型都塞进 plan。
+
 ## 3. 位置
 
 用户给路径就使用该路径。否则把 `note` 返回在对话中，或遵循仓库既有 plan 惯例。
@@ -61,7 +72,7 @@ Slice: `S1` <name>
 <上游文档尚未直接给出的改动或短顺序。>
 
 ## Verify
-- <命令或真实产物检查。>
+- <能把已批准 outcome 与 material failure 区分开的直接检查。>
 
 ## Stop if
 - <需要产品/设计决策或重写 plan 的条件。>
@@ -89,6 +100,8 @@ design 没有限定的局部实现选择留给 executor。
   Handoff contract 的 Open 中。
 - Plan 不修改模块 ownership 或 interface。执行顺序暴露 design 问题时返回 codebase-design。
 - Acceptance 写可观察结果；Verify 写证明结果的检查。
+- Build、type、lint、snapshot 和 coverage 结果只能证明它们直接观察到的性质，不能代替
+  通用的行为证据。
 - 用户要求的是 plan 时，起草期间不执行实现。
 
 ## 6. 在需要时准备 Slice-Ticket 映射

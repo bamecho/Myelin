@@ -100,6 +100,9 @@ request returns to Feature after this playbook produces a taskable handoff.
    only for coordination, meaningful intermediate states, migrations, or heavy
    stop rules. Plan only the approved current slice; later product possibilities
    remain unplanned. A recommendation or design-only request stops without a plan.
+   - When the current slice is too broad for one fresh context, or its acceptance
+     could pass a plausible wrong implementation, Use skill
+     `design-verifiable-slices` to split it and design the verification contract.
    - For multi-step sweeps or migrations, Use skill
      `principle-sequence-verifiable-units`; every unit must end in a real check.
    - For execution steps that may retry, restart, or resume after a partial run,

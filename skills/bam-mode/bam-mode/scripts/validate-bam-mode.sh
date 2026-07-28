@@ -163,6 +163,30 @@ require_pattern "$skill_dir/references/plan.md" \
   'dependency, removal, new artifact, and stop rule.*source' \
   'full plans must audit coordination claims against upstream sources'
 
+require_pattern "$skill_dir/references/plan.md" \
+  'Context gate' \
+  'plan slices must fit one fresh execution context'
+
+require_pattern "$skill_dir/references/plan.md" \
+  'Oracle gate' \
+  'plan verification must reject plausible wrong implementations'
+
+require_pattern "$skill_dir/playbooks/design.md" \
+  'design-verifiable-slices' \
+  'Design must load the verifiable-slice skill when context or oracle gates fail'
+
+require_pattern "$skills_root/design-verifiable-slices/SKILL.md" \
+  'credible ways the result could be wrong' \
+  'verifiable slices must reason about plausible false success'
+
+require_pattern "$skills_root/design-verifiable-slices/SKILL.md" \
+  'fresh working context' \
+  'verifiable slices must protect the execution context boundary'
+
+reject_pattern "$skills_root/design-verifiable-slices/SKILL.md" \
+  '## Handoff contract|`(Sources|Slice|Scope|Context envelope|Failure model|Acceptance oracle|Verify order|Stop / split)`:' \
+  'verifiable slices must preserve judgment instead of requiring a handoff form'
+
 reject_pattern "$skill_dir/SKILL.md" \
   'references/failure-audit\.md' \
   'failure audit is a maintenance asset, not a runtime SKILL reference'

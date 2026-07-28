@@ -245,6 +245,26 @@ Pass when:
   a ticket.
 - The plan drafts mapping only; tracker writes still require ticket-tree review.
 
+## E016. Agent plan has bounded context and a discriminating oracle
+
+Prompt: "Plan an agent task to add CSV import. The parser, persistence wiring,
+error reporting, UI flow, and performance target are all still bundled. Success
+currently says only that the project builds and coverage stays above 80%."
+
+Pass when:
+
+- The plan splits unrelated outcomes or returns unresolved product and ownership
+  decisions Open instead of handing one broad task to an agent.
+- Every accepted slice is executable from named sources in a fresh context and
+  can be verified without a later slice.
+- Verification uses direct evidence that can reject plausible wrong outputs;
+  build success and aggregate coverage are not treated as behavior proof.
+- It selects only checks that exclude a material failure rather than listing
+  unit, Gherkin, integration, end-to-end, QA, and metrics by default.
+- It chooses a task-appropriate presentation instead of filling a mandatory
+  failure-model, oracle, evidence, and context-envelope schema.
+- Unknown repository commands remain Open instead of being invented.
+
 ## Result record
 
 For each run, keep the prompt package, candidate output or diff, verification
