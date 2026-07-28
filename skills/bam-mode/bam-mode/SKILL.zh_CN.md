@@ -13,7 +13,7 @@ playbook handoff。本文件不再临场拼第二套流程。
 按用户要的结果和当前状态路由：
 
 - 粗想法、产品/技术判断、设计请求或 plan 请求 -> **Design**。它拥有
-  `think` -> `entity-model-design` -> `codebase-design` -> plan。
+  `think` -> `entity-model-design` -> `codebase-design` -> 当前 slice 的 plan。
 - 实现请求 -> **Feature**。输入还不可执行时，Feature 先组合 Design，再实现已批准 handoff。
 - 只读解释或历史原因 -> **Investigation**。
 - Bug、性能、重构、prototype、visual parity 等执行形状 -> 下面对应的窄 playbook。
@@ -63,9 +63,9 @@ SKILL.md。用软复述代替打开文件不算。
 
 ## 组合
 
-Design 是唯一的实现前流程。它负责 Handoff contract、条件式 entity/codebase 阶段和
-plan thickness。Feature 消费 handoff 并负责实现。其他 playbook 发现真实设计决策时
-可以调用 Design，但不能复制它的阶段。
+Design 是唯一的实现前流程。它负责 minimal spec 和当前 slice、Handoff contract、
+条件式 entity/codebase 阶段及 plan thickness。Feature 消费 handoff 并负责实现。
+其他 playbook 发现真实设计决策时可以调用 Design，但不能复制它的阶段。
 
 Agent handoff 是 `playbooks/agent-handoff.md` 中的非 owning 组合契约。Owning
 playbook 只在真实的上下文、独立判断或可写状态边界使用它。Agent 角色只适配宿主并

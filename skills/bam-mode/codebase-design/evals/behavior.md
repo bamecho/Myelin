@@ -123,4 +123,7 @@ dependency, and `src/index.js` remains byte-for-byte unchanged.
   retains local freedom.
 - Keep evaluation history out of runtime context. It remains under `evals/` as
   evidence and is loaded only when the user asks to evaluate the skill.
-- Do not add reviewers, audit stages, fallback layers, or mandatory sections.
+- Keep Definition Mode declaration-first: exact contracts plus short Tech Notes,
+  with no function bodies or predicted diff.
+- Keep Audit Mode as an explicit review branch, never a mandatory pre-build
+  stage. Findings require repository evidence and a smaller target contract.

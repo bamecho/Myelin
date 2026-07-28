@@ -40,7 +40,7 @@ These are **when Multica may be touched**, not a mandatory pipeline. Endpoint st
 | Design moment | ticket-tree action |
 |---------------|-------------------|
 | Goal / Handoff first draft approved | **seed-outcome** (`create` or adopt) |
-| Spec file written or path stable | **sync** outcome `spec_path` + Sources; comment “spec landed” if useful |
+| Spec or requested roadmap file written or path stable | **sync** outcome path + Sources; comment “spec landed” if useful |
 | entity-model-design approved **or** skipped | **sync** `entity_path` or omit; never a ticket for skip |
 | codebase-design approved **or** skipped | **sync** `design_path`; still no slice unless cuts are clear and user wants fanout |
 | plan `note`/`full` approved, or implementation requested with taskable design | **fanout-slices** |
@@ -54,7 +54,7 @@ User can collapse seed+fanout into one apply when all inputs already exist.
 | Event | Do | Do not |
 |-------|----|--------|
 | New/updated spec.md | Match outcome by `ticket_tree_id`; `sync` path + optional rewrite Sources | Create `MUL-… Spec` |
-| New entity / design / plan file | Same: path metadata on **outcome** (and later on slices at fanout) | One issue per file |
+| New roadmap / entity / design / plan file | Same: path metadata on **outcome** (and later on slices at fanout) | One issue per file |
 | Doc deleted or path moved | `sync` paths; rewrite managed body if needed | Leave stale paths |
 | Doc work is multi-day with its own owner **and** user asks to track that gate | One **blocker** (role=blocker), Goal = “lock entity fields…”, not the filename | Treat blocker as implementation slice |
 

@@ -55,7 +55,7 @@ optional implementation aid or the requested deliverable.
 
 | Stage | May do | Must not do |
 |---|---|---|
-| Design / `think` | Lock decided tokens; list Open blockers; set Skip | Fill locked-class gaps silently |
+| Design / `think` | Lock decided tokens; select the current slice; list Open blockers; set Skip | Fill locked-class gaps silently; deepen later possibilities |
 | `entity-model-design` | Model only Locked data decisions; gaps stay Open | Invent fields, regex, order, extra entities |
 | `codebase-design` | Place Locked behavior behind owners/interfaces | Reopen product tokens; invent product fields |
 | plan | Add ordering, ownership, verification, and stop conditions using Locked names | Redesign modules/fields; invent product rules; copy upstream artifacts |
@@ -72,8 +72,8 @@ Open, stop and add it under Open (or ask the user).
 - Choose plan thickness from `plan.md`. An explicit plan request is `note` or
   `full`, never `none`.
 
-Write skips as `entity-model-design skipped: <reason>` (same pattern for
-codebase-design) in the playbook trail when bam-mode runs.
+Write skips as `entity-model-design skipped: <reason>` or
+`codebase-design skipped: <reason>` in the playbook trail when bam-mode runs.
 
 ## Thin path
 

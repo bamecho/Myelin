@@ -1,6 +1,6 @@
 ---
 name: ticket-tree
-description: "Seed an early Multica outcome ticket when design direction locks, then fan out staged implementation slices once artifacts support cuts. Use for ticket schemes, Multica issue trees, seed-outcome, fanout-slices, or sync/rewrite from spec, handoff, entity, codebase-design, or plan."
+description: "Seed an early Multica outcome ticket when design direction locks, then fan out staged implementation slices once artifacts support cuts. Use for ticket schemes, Multica issue trees, seed-outcome, fanout-slices, or sync/rewrite from spec, roadmap, handoff, entity, codebase-design, or plan."
 ---
 
 # Ticket Tree
@@ -41,12 +41,17 @@ Not for: inventing scope, replacing Design, think Triage, or ad-hoc comments (`m
 
 **Short solo path:** if design finishes the same session and implementation is immediate, skip a separate seed apply — one apply may create outcome (+ slices) together. Still **do not** mint document tickets.
 
+**Slice-to-ticket default:** use one outcome parent for the approved result and
+one child per independently mergeable implementation slice. Keep atomic work as
+one outcome (or one child when the tracker requires a build ticket). A module,
+document, or plan microstep is not a slice by itself.
+
 ## Authority
 
 | Rank | Artifact | Feeds |
 |------|----------|--------|
 | 1 | Goal / Building + Handoff Locked / non-goals | Outcome title and Goal (enough to **seed**) |
-| 2 | Spec path (as it appears) | Outcome Sources; still not a separate ticket |
+| 2 | Spec or roadmap path from `think` (as it appears) | Outcome Sources and current delivery-slice identity; still not a separate ticket |
 | 3 | Entity model (if present) | Constraints; seed metadata only until fanout |
 | 4 | Codebase design (if present) | Slice cuts at fanout |
 | 5 | Plan (`note` / `full` / implicit single slice) | Stage order, Verify, Stop at fanout |
@@ -98,7 +103,7 @@ Every managed issue carries metadata (string values unless noted):
 | `ticket_tree_role` | `outcome` \| `slice` \| `blocker` |
 | `ticket_tree_phase` | On **outcome** only: `seed` \| `fanned` — last applied lifecycle phase |
 | `ticket_tree_stage` | Stage ordinal string for staged children |
-| `spec_path` / `handoff_path` / `entity_path` / `design_path` / `plan_path` | Repo-relative paths when present |
+| `spec_path` / `roadmap_path` / `handoff_path` / `entity_path` / `design_path` / `plan_path` | Repo-relative paths when present |
 | `ticket_tree_managed` | `true` — body is skill-owned |
 | `ticket_tree_sources_fp` | Fingerprint of cited sources at last apply |
 
@@ -227,6 +232,7 @@ Use `references/draft-template.md`. Include phase, mode, node table, risks, comm
 
 ## Sources
 - Spec: `<path or —>`
+- Roadmap: `<path or —>`
 - Handoff: `<path or —>`
 - Entity: `<path or —>`
 - Design: `<path or —>`
@@ -267,6 +273,7 @@ Refresh **Sources**, **Design status**, and **Children** on seed sync and after 
 
 ## Sources
 - Spec: `<path>` <optional #anchor>
+- Roadmap: `<path>` <optional #anchor>
 - Handoff: `<path>` (if any)
 - Entity: `<path>` (if any)
 - Design: `<path>` (if any)
@@ -292,7 +299,7 @@ Refresh **Sources**, **Design status**, and **Children** on seed sync and after 
 ## Hard Rules
 
 1. **Seed early, fan out late** — outcome when Goal is clear; slices when cuts are honest.
-2. **No document-mirror tickets** by default (no spec/entity/design/plan issue per file).
+2. **No document-mirror tickets** by default (no spec/roadmap/entity/design/plan issue per file).
 3. **Draft before write** unless pre-approved and non-destructive.
 4. **Update-in-place over recreate.**
 5. **Managed descriptions are fully replaced**, never half-merged.

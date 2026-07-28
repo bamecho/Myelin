@@ -18,7 +18,8 @@ handoffs. Do not assemble a second workflow in this file.
 Route by the user's requested outcome and current state:
 
 - A rough idea, product/technical judgment, design request, or plan request ->
-  **Design**. It owns `think` -> `entity-model-design` -> `codebase-design` -> plan.
+  **Design**. It owns `think` -> `entity-model-design` ->
+  `codebase-design` -> plan for the current slice.
 - An implementation request -> **Feature**. Feature composes Design first when
   the input is not taskable, then implements the approved handoff.
 - A read-only explanation or historical question -> **Investigation**.
@@ -75,10 +76,11 @@ verification, or safety. Patch the owning playbook or add a regression case to
 
 ## Composition
 
-Design is the single pre-implementation flow. It owns the Handoff contract,
-conditional entity and codebase stages, and plan thickness. Feature consumes
-that handoff and owns implementation. Other playbooks may call Design when they
-discover a real design decision, but they do not duplicate its stages.
+Design is the single pre-implementation flow. It owns the minimal spec and
+current slice, Handoff contract, conditional entity and codebase stages, and
+plan thickness. Feature consumes that handoff and owns implementation. Other
+playbooks may call Design when they discover a real design decision, but they
+do not duplicate its stages.
 
 Agent handoff is a non-owning composition contract at
 `playbooks/agent-handoff.md`. Owning playbooks use it only at real context,

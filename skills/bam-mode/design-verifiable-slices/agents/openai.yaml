@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Verifiable Slices"
+  short_description: "Bound agent tasks with strong executable success criteria"
+  default_prompt: "Use $design-verifiable-slices to split this work into bounded slices with adversarially strong verification."
