@@ -1,8 +1,10 @@
 # Plan
 
-A plan is an execution deliverable derived from upstream decisions. It is
-optional when the user asks for implementation, but required when the user
-explicitly asks for a plan.
+A plan is an execution deliverable for the approved current slice, derived from
+upstream decisions. It is optional when the user asks for implementation, but
+required when the user explicitly asks for a plan. It orders and verifies the
+slice currently being handed to implementation; later product outcomes remain
+outside its scope.
 
 Read the actual spec and approved codebase-design artifacts before drafting.
 Treat their product decisions, module ownership, interfaces, non-goals, and
@@ -32,13 +34,29 @@ single-slice feature, `none`, a short note, and an expanded plan all scored
 without changing architecture or correctness. This supports the thin default
 for that task class, not a universal ban on planning detail.
 
-## 2. Choose the location
+## 2. Consume the current slice
+
+Read the current slice approved in the spec. Leave later product outcomes
+unplanned. Give the current slice a stable identity when the plan or ticket tree
+needs to reference it across sections:
+
+```md
+Slice: `S1` <name>
+Outcome: <observable value>
+```
+
+For a `full` plan, each independently mergeable execution unit gets a stable
+`slice-<slug>` key with `Goal`, `Depends on`, `Verify`, and `Stop if`. A unit
+that cannot land or verify independently is not a separate slice; keep it in
+the same unit.
+
+## 3. Choose the location
 
 Use the user's path when supplied. Otherwise return a `note` in chat or follow
 an established repository plan convention. A `full` plan may use a directory
 when separate phase files make ownership or verification clearer.
 
-## 3. Write only the execution delta
+## 4. Write only the execution delta
 
 A useful `note` usually contains:
 
@@ -46,6 +64,8 @@ A useful `note` usually contains:
 # <title>
 
 Sources: <spec path>; <approved design path>
+
+Slice: `S1` <name>
 
 ## Goal
 <The observable final state.>
@@ -64,7 +84,8 @@ A `full` plan keeps the same source authority, goal, verification, and stop
 rules, then expresses only the coordination the `note` cannot carry: independent
 owners, dependencies between their outputs, intentional intermediate states, or
 phase-specific acceptance. Choose the representation that makes those relations
-easy to review; do not fill a fixed task template.
+easy to review; use ASCII when a dependency or sequence diagram is needed. Do
+not fill a fixed task template.
 
 Omit anything that does not change execution. Reference upstream tables and
 rationale by path instead of copying them.
@@ -84,7 +105,7 @@ no benefit. For `full`, include the detail needed to coordinate owners, preserve
 an intermediate state, or make a stop decision. Leave local implementation
 choices to the executor when the spec and design do not constrain them.
 
-## 4. Preserve upstream authority
+## 5. Preserve upstream authority
 
 - Do not invent product tokens such as fields, CLI flags, regexes, ordering, or
   warning codes. Missing locked-class decisions stay Open in the Handoff contract.
@@ -93,7 +114,25 @@ choices to the executor when the spec and design do not constrain them.
 - Acceptance states an observable result. Verify names the check that proves it.
 - Do not execute while drafting the requested plan.
 
-## 5. Handoff
+## 6. Prepare ticket mapping when requested
+
+Use a hybrid parent/child mapping:
+
+- Create or reuse one **outcome** ticket for the approved product outcome.
+  Documents are Sources on that ticket, never sibling spec/entity/design/plan
+  tickets.
+- Create one child ticket per independently mergeable execution slice, using its
+  stable key and its own Verify/Stop. Children share the outcome context and
+  stage order.
+- Keep a single outcome ticket when the work is atomic or the supposed slices
+  cannot land independently. Do not aggregate genuinely independent slices into
+  one giant implementation ticket, and do not create tickets for microsteps.
+
+Emit this mapping only when the user asks for tickets or a `ticket-tree`
+handoff. The plan does not write to the tracker. Apply the tree only after its
+draft is approved.
+
+## 7. Handoff
 
 Do not add `draft` / `ready` status ceremony or a mandatory separate reviewer.
 Existing reviewer tests repeatedly missed source contradictions. `full` remains

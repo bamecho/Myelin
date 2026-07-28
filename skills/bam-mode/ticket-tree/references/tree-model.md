@@ -28,6 +28,11 @@ Load when choosing parent/child shape, stages, or whether to fan out.
 - **Slice** = independently mergeable implementation unit with its own Verify. Created only at fanout.
 - **Blocker** = Open product/design decision that must close before honest build work. Allowed in both phases.
 
+The default mapping is therefore `1 outcome : N slices`, where `N` is the count
+of independently mergeable units. `N=0` or one atomic unit stays outcome-only;
+never split a slice merely to mirror a module, document, or implementation
+microstep.
+
 Multica: children use `--parent <outcome>`. `--stage N` is an ordered barrier group; parent assignee wakes when every issue in a stage finishes. Later stages stay `backlog` until advanced.
 
 ## What is never the parent (and never a default node)
@@ -35,6 +40,7 @@ Multica: children use `--parent <outcome>`. `--stage N` is an ordered barrier gr
 | Not a parent / not a default ticket | Why |
 |-------------------------------------|-----|
 | Spec file | Decision authority; attach as `spec_path` |
+| Requested roadmap from `think` | Product sequencing authority; attach as `roadmap_path` |
 | Entity / codebase-design doc | Often skipped; intermediate artifact |
 | Plan file | Optional execution delta; may be `none` |
 | “Write the design doc” process ticket | Prefer outcome comment + path sync; blocker only if multi-day owned gate |

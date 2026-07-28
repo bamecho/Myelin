@@ -16,7 +16,7 @@ Emit this before any Multica write. Keep it scannable; link paths instead of pas
 | Path | Role | Fingerprint |
 |------|------|-------------|
 | <path> | spec | <hash or mtime+size> |
-| … | handoff / entity / design / plan | … |
+| … | roadmap / handoff / entity / design / plan | … |
 
 ## Live Multica (if any)
 - matched outcome: <MUL-xxx or none>
@@ -34,7 +34,7 @@ Emit this before any Multica write. Keep it scannable; link paths instead of pas
 ## Phase guard
 - [ ] seed-outcome draft contains **zero** slice-* rows (or justified same-day collapse)
 - [ ] fanout-slices reuses one outcome (no second Goal ticket)
-- [ ] no document-mirror titles (Spec/Entity/Design/Plan file tickets)
+- [ ] no document-mirror titles (Spec/Roadmap/Entity/Design/Plan file tickets)
 
 ## Per-node cards
 ### outcome

@@ -1,12 +1,13 @@
 ### Design
 
 **You own the pre-implementation decisions.** Turn a rough direction into the
-smallest approved artifact that can safely control what happens next. Do not
-write implementation code.
+smallest approved decision surface that can safely control what happens next.
+Keep it in chat unless the user requests a file. Implementation code belongs to
+Feature.
 
-The complete flow is `think` -> `entity-model-design` -> `codebase-design` -> plan.
-The middle stages are conditional, and plan may be `none`; one skipped
-stage never licenses another stage to make its decisions silently.
+The complete flow is `think` -> `entity-model-design` -> `codebase-design` -> plan for the current slice.
+The middle stages are conditional, and plan may be `none`; one skipped stage
+never licenses another stage to make its decisions silently.
 
 Principles are risk-triggered lenses, not stages or a checklist. Use a principle
 skill only when the current step exposes its named risk, and use it to change a
@@ -30,13 +31,17 @@ request returns to Feature after this playbook produces a taskable handoff.
 1. **Set the endpoint.** Name what the user asked to receive: a recommendation,
    an approved design, a plan, or implementation after design. Stop at that
    endpoint. Do not produce later artifacts merely to complete this flow.
-2. **Think and ground.** Read the current repository, governing instructions,
+2. **Write the minimal spec.** Read the current repository, governing instructions,
    prior decisions, and live external contracts that bear on the choice.
-   Use skill `think` to establish the goal, success evidence, constraints,
-   non-goals, and open decisions. Explore materially different alternatives when
-   the choice is open. The reasoning method and presentation are adaptive; only
-   the decision, evidence, uncertainty, and falsifier must survive. Draft or
-   refresh the Handoff contract from `../references/handoff-contract.md`.
+   Use skill `think` to establish the smallest outcome target, current delivery
+   slice, acceptance, boundary, non-goals, and Open decisions needed for the next
+   design stage. Keep the response in chat unless the user explicitly requests a
+   file.
+   Explore materially different
+   alternatives when the choice is open. The reasoning method and presentation
+   are adaptive; only the decision, evidence, uncertainty, and falsifier must
+   survive. Draft or refresh the Handoff contract from
+   `../references/handoff-contract.md`.
    - When product experience or feature scope is the choice, Use skill
      `principle-experience-first` to judge the target from the consumer's seat.
    - When a foundational new requirement enters an existing design, Use skill
@@ -69,9 +74,10 @@ request returns to Feature after this playbook produces a taskable handoff.
    after the entity stage when the work changes module ownership, interactions,
    public interfaces, seam placement, or caller knowledge. It consumes the
    approved entity model when present. Record
-   `codebase-design skipped: <reason>` for an obvious one-owner change. Use
-   skill `architect` only when the approved module model still needs exact types,
-   signatures, or module scaffolding before execution.
+   `codebase-design skipped: <reason>` for an obvious one-owner change.
+   Definition Mode owns the exact repository-native type/interface declarations
+   and adjacent Tech Notes; do not add a second architecture document for them.
+   Use Audit Mode only when the requested endpoint is a repository design review.
    - When raw external input, validation, adapters, or error ownership cross the
      boundary, Use skill `principle-boundary-discipline` to place parsing and
      guards.
@@ -92,7 +98,8 @@ request returns to Feature after this playbook produces a taskable handoff.
    when the approved decisions already make one single-agent slice taskable,
    `note` when Goal/Verify/Stop adds missing execution information, and `full`
    only for coordination, meaningful intermediate states, migrations, or heavy
-   stop rules. A recommendation or design-only request stops without a plan.
+   stop rules. Plan only the approved current slice; later product possibilities
+   remain unplanned. A recommendation or design-only request stops without a plan.
    - For multi-step sweeps or migrations, Use skill
      `principle-sequence-verifiable-units`; every unit must end in a real check.
    - For execution steps that may retry, restart, or resume after a partial run,
@@ -116,7 +123,7 @@ request returns to Feature after this playbook produces a taskable handoff.
    status ceremony; it does not waive this risk-triggered source-fidelity check.
 7. **Hand off without re-deciding.** Refresh Handoff Locked/Open/Skip from the
    approved artifacts. If the endpoint was recommendation, design, or plan,
-   return that artifact and stop. If the endpoint includes implementation,
+   return that surface (chat sections or a requested file) and stop. If the endpoint includes implementation,
    return to Feature with the Handoff and artifact paths; Feature executes the
    decisions and does not reopen them.
 

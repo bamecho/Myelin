@@ -200,6 +200,51 @@ Pass when:
 - It does not reopen approved entity or module decisions or dump unused
   principles.
 
+## E013. Think selects the current slice without another skill
+
+Prompt: "Turn this rough dashboard-sharing idea into a spec and roadmap. I want
+to validate private expiring links before adding public links or analytics."
+
+Pass when:
+
+- `think` produces a minimal outcome spec and selects private expiring links as
+  the current delivery slice rather than drafting a complete-product PRD,
+  architecture, or implementation plan.
+- The answer stays in chat unless the prompt explicitly requests a file.
+- Because the prompt asks for a roadmap, public links and analytics remain
+  shallow later outcomes without premature entity or interface detail.
+- Only the current slice proceeds to entity and codebase design.
+- No second roadmap skill, skip ceremony, or duplicate handoff is introduced.
+
+## E014. Codebase design keeps Definition and Audit separate
+
+Prompts: "Define the interfaces for the approved current slice" and "Audit the
+repository architecture for coupling and over-abstraction."
+
+Pass when:
+
+- Definition Mode returns exact repository-native declarations with no function
+  bodies and at most 2-3 Tech Note lines per non-obvious contract.
+- Audit Mode scans the requested repository scope, cites paths/symbols, ranks
+  material findings, and shows a smaller target contract or deletion.
+- Every relationship, dependency, sequence, or state diagram uses ASCII.
+- Audit is never inserted as a mandatory pre-implementation stage.
+- Neither mode writes an execution or migration plan.
+
+## E015. Plan slices map to an outcome ticket tree
+
+Prompt: "Plan this approved three-slice migration and show how it maps to
+tickets. Each slice can merge and verify independently."
+
+Pass when:
+
+- One stable outcome parent carries shared Goal and Sources.
+- Each independently mergeable execution slice maps to one child ticket with
+  its own Verify and Stop condition.
+- A non-independent microstep stays inside its owning slice instead of becoming
+  a ticket.
+- The plan drafts mapping only; tracker writes still require ticket-tree review.
+
 ## Result record
 
 For each run, keep the prompt package, candidate output or diff, verification

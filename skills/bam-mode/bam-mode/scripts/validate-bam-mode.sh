@@ -244,8 +244,71 @@ require_pattern "$skill_dir/playbooks/opening-a-pr.md" \
   'PR monitoring must bind to the actual loop provider contract'
 
 require_pattern "$skill_dir/playbooks/design.md" \
-  'think.*entity-model-design.*codebase-design.*plan|think[[:space:]]*→[[:space:]]*entity-model-design[[:space:]]*→[[:space:]]*codebase-design[[:space:]]*→[[:space:]]*plan' \
+  'think.*entity-model-design.*codebase-design.*plan|think[[:space:]]*→.*entity-model-design[[:space:]]*→[[:space:]]*codebase-design[[:space:]]*→[[:space:]]*plan' \
   'Design must own the complete think -> entity model -> codebase design -> plan flow'
+
+require_pattern "$skills_root/think/SKILL.md" \
+  'smallest independently useful current delivery slice' \
+  'think must select the current independently useful delivery slice'
+
+for no_roadmap_skill_file in \
+  "$skill_dir/SKILL.md" \
+  "$skill_dir/SKILL.zh_CN.md" \
+  "$skill_dir/playbooks/design.md" \
+  "$skill_dir/references/handoff-contract.md" \
+  "$skill_dir/references/plan.md" \
+  "$skill_dir/references/plan.zh_CN.md"; do
+  reject_pattern "$no_roadmap_skill_file" \
+    'roadmap-design|Roadmap Design' \
+    'current-slice selection must stay inside think, not a separate roadmap skill'
+done
+
+require_pattern "$skills_root/entity-model-design/SKILL.md" \
+  'ASCII relationship graph' \
+  'entity-model-design must require an ASCII relationship graph'
+
+reject_pattern "$skills_root/entity-model-design/SKILL.md" \
+  'Mermaid|erDiagram|```mermaid' \
+  'entity-model-design must not require Mermaid'
+
+require_pattern "$skills_root/think/SKILL.md" \
+  'Reply in chat by default' \
+  'think must default to chat output'
+
+require_pattern "$skills_root/think/SKILL.md" \
+  'File creation activates only when' \
+  'think must write a file only on explicit request'
+
+for ascii_only_file in \
+  "$skills_root/think/SKILL.md" \
+  "$skills_root/entity-model-design/SKILL.md" \
+  "$skills_root/codebase-design/SKILL.md" \
+  "$skill_dir/references/plan.md" \
+  "$skill_dir/references/plan.zh_CN.md"; do
+  reject_pattern "$ascii_only_file" \
+    'Mermaid|erDiagram|```mermaid' \
+    'design flow diagrams must use ASCII, not Mermaid'
+done
+
+require_pattern "$skills_root/codebase-design/SKILL.md" \
+  '## Definition Mode' \
+  'codebase-design must expose Definition Mode'
+
+require_pattern "$skills_root/codebase-design/SKILL.md" \
+  '## Audit Mode' \
+  'codebase-design must expose Audit Mode'
+
+require_pattern "$skills_root/codebase-design/SKILL.md" \
+  '2-3 line Tech Notes' \
+  'Definition contracts must keep Tech Notes short'
+
+require_pattern "$skill_dir/references/plan.md" \
+  'one \*\*outcome\*\* ticket.*approved product outcome' \
+  'plan must map one parent ticket for the approved product outcome'
+
+require_pattern "$skill_dir/references/plan.md" \
+  'one child ticket per independently mergeable execution slice' \
+  'plan must map independently mergeable slices to child tickets'
 
 require_pattern "$skill_dir/playbooks/design.md" \
   'risk-triggered.*not stages|risk-triggered.*not.*checklist' \

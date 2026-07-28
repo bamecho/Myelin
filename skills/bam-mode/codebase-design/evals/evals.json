@@ -3,36 +3,37 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Read the approved spec, handoff, stale notes, source, exports, callers, and tests. Produce a codebase design for sync preview. Do not implement or write a plan.",
-      "expected_output": "A human-reviewable architecture model that exposes shared plan ownership, preview and execution interaction, semantic interfaces, caller knowledge, and the chosen boundary without full function bodies.",
+      "prompt": "Read the approved spec, handoff, stale notes, source, exports, callers, and tests. Use Definition Mode to produce a codebase design for sync preview. Do not implement or write a plan.",
+      "expected_output": "A compact definition artifact with exact repository-native declarations, shared plan ownership, preview and execution interaction, caller knowledge, and short Tech Notes without function bodies.",
       "files": ["fixtures/sync-preview"],
       "assertions": [
         "Grounds the current model in actual modules and public exports",
         "Makes shared filtering and ordering ownership explicit",
         "Explains preview and execution control/data flow and client avoidance",
-        "States interface semantics and caller knowledge, not only signatures",
+        "Uses exact repository-native declarations plus 2-3 line Tech Notes for non-obvious semantics",
+        "Uses ASCII for every interaction or dependency diagram",
         "Rejects stale command, plugin, config, and TypeScript proposals",
         "Contains no full function implementation"
       ]
     },
     {
       "id": 2,
-      "prompt": "Read the approved spec, handoff, stale notes, package exports, source, callers, and tests. Produce a codebase design for billing preview. Infer compatibility from code. Do not implement or write a plan.",
-      "expected_output": "A human-reviewable architecture model that preserves independent published contracts, exposes shared charge-plan ownership and gateway interaction, and rejects the stale monolith and adapter design.",
+      "prompt": "Read the approved spec, handoff, stale notes, package exports, source, callers, and tests. Use Definition Mode to produce a codebase design for billing preview. Infer compatibility from code. Do not implement or write a plan.",
+      "expected_output": "A compact definition artifact that preserves independent published contracts, exposes exact shared charge-plan and gateway declarations, and rejects the stale monolith and adapter design.",
       "files": ["fixtures/billing-preview"],
       "assertions": [
         "Infers public normalize and select contracts from package exports and tests",
         "Keeps normalization and selection independent from billing orchestration",
         "Explains preview and execution interaction through one charge-plan policy",
-        "States semantic interface and caller-knowledge changes",
+        "States exact interface declarations, short Tech Notes, and caller-knowledge changes",
         "Rejects BillingEngine, Stripe adapters, test deletion, and TypeScript migration",
         "Contains no full function implementation"
       ]
     },
     {
       "id": 3,
-      "prompt": "Revise the existing sync-preview design after this human correction: SyncPlanner must be an independent logical module because a future scheduled job is a third caller. The CLI and sync executor both consume plan(records). The planner knows nothing about stdout or the client. Public exports remain unchanged. Do not implement code or write a plan.",
-      "expected_output": "A revised architecture model that applies the corrected module and exact interface without reopening alternatives, inventing rationale, or specifying unconfirmed scheduled-job behavior.",
+      "prompt": "In Definition Mode, revise the existing sync-preview design after this human correction: SyncPlanner must be an independent logical module because a future scheduled job is a third caller. The CLI and sync executor both consume plan(records). The planner knows nothing about stdout or the client. Public exports remain unchanged. Do not implement code or write a plan.",
+      "expected_output": "A revised declaration-first architecture model that applies the corrected module and exact interface without reopening alternatives, inventing rationale, or specifying unconfirmed scheduled-job behavior.",
       "files": ["fixtures/sync-preview"],
       "assertions": [
         "Uses an independent SyncPlanner with the exact plan(records) interface",
@@ -41,6 +42,21 @@
         "Does not reopen the corrected choice with alternatives or retroactive rationale",
         "Does not invent scheduled-job execution behavior",
         "Contains no full function implementation"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Use Audit Mode to review the complete billing-preview fixture repository. Find material over-abstraction, coupling, leaky boundaries, or dead legacy design. Do not implement or write a migration plan.",
+      "expected_output": "Evidence-ranked findings that distinguish real current boundaries from stale proposals, show smaller exact target contracts or deletions, and end with a compact dependency shape.",
+      "files": ["fixtures/billing-preview"],
+      "assertions": [
+        "Scans exports, callers, tests, and dependency direction across the fixture",
+        "Ranks only material findings and cites paths or symbols",
+        "Does not report stale-notes proposals as live architecture",
+        "Shows an exact smaller target contract or deletion for each finding",
+        "Uses ASCII for every target module or dependency diagram",
+        "Uses Tech Notes only for non-obvious effect, failure, state, transaction, or concurrency semantics",
+        "Contains no implementation or rollout plan"
       ]
     }
   ]
