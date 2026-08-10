@@ -1,38 +1,37 @@
 ---
 name: think
 description: >
-  Turn a rough idea into the smallest approved product/technical spec and
-  current delivery slice needed for design. Use for planning direction, scope
-  slicing, roadmaps, architecture choices, feasibility, value judgment, or
-  deciding whether work is worth doing before implementation. Use Evaluation
-  or Triage branches for keep/kill and bundled requests. Not for routine bug
-  fixes or small edits.
+  Turn a rough idea into an evidence-grounded product or technical decision.
+  Use for planning direction, scope judgment, roadmaps, architecture choices,
+  feasibility, value judgment, or deciding whether work is worth doing before
+  implementation. Use Evaluation or Triage branches for keep/kill and bundled
+  requests. Not for routine bug fixes or small edits.
 ---
 
-# Think: Minimal Spec Before Design
+# Think: Reach a Decision
 
 Prefix your first line with 🥷 inline, not as its own paragraph.
 
 Take a position. State the evidence and the premise that would change it.
-`think` owns product direction and scope; downstream skills own data, interface,
-and execution detail.
+`think` owns the recommendation: what problem is worth solving, which approach
+best fits the evidence, and where its meaningful boundary lies.
 
 ## Contract
 
-- **Outcome:** the smallest approved spec that fixes the next product or
-  technical decision and, when work continues to design, bounds the current
-  delivery slice.
-- **Done when:** Target, outcome Scope, Acceptance, non-goals, Locked
-  decisions, and real Open blockers are explicit.
+- **Outcome:** one evidence-grounded solution to the product or technical
+  decision the user actually faces.
+- **Done when:** the chosen direction, decisive evidence, meaningful boundary,
+  and fragile premise are explicit enough for the user to judge whether to
+  adopt the solution. When a spec is warranted, its Acceptance, non-goals, and
+  real Open blockers are explicit too.
 - **Evidence:** current repository state, governing project docs, live external
   contracts when relevant, prior decisions, and user constraints.
-- **Output:** the shortest useful answer in chat. Expand to a Minimal Spec and
-  Handoff only when the next stage needs them. An implementation plan is a
-  downstream artifact.
+- **Output:** the shortest useful answer in chat. Write a Minimal Spec only when
+  the user requests one or the decision needs a durable multi-part contract.
 
-Decision-complete means complete enough to begin the current slice, not
-exhaustive for the eventual product. Every extra future detail increases review
-and sync cost.
+Decision-complete means the user can choose a direction, not that every feature
+has been designed. Every included detail must change the recommendation, its
+acceptance, or a real blocker.
 
 ## Default Workflow
 
@@ -41,15 +40,21 @@ and sync cost.
    bear on the decision. When durable project context exists, use
    [references/durable-context.md](references/durable-context.md) for its read
    order and re-verification rules.
-2. Select the smallest independently useful current delivery slice for the
-   observable target. Describe later outcomes only to the depth needed to explain
-   sequencing; defer their entity and interface design until they become current.
+2. Frame the smallest decision that preserves the observable target. For a
+   broad idea, recommend the coherent solution shape and defer feature mechanics
+   that do not change that direction. Treat scope as the boundary of the
+   recommendation; add sequencing only when requested or when it changes the
+   choice.
 3. Recommend one approach with rationale, effort, risk, and the most fragile
    premise. Mention one alternative only when its tradeoff is genuinely close.
-4. Lock only decisions supported by the user or evidence. Put missing product
-   tokens under Open with impact, default if honest, and owner.
-5. Present the recommendation in chat and stop for explicit approval. One
-   sentence is enough when it carries the decision, boundary, and next step.
+4. When a spec is warranted, lock only decisions supported by the user or
+   evidence. Put missing choices that block the spec under Open with impact,
+   default if honest, and owner.
+5. Present the recommendation in chat. One sentence is enough when it carries
+   the decision, boundary, and fragile premise. Make the approval boundary
+   explicit only when further work depends on acceptance.
+
+Return the recommendation itself. Omit skill, workflow, and routing narration.
 
 Use official framework or service solutions before custom design. Query current
 official documentation when an external contract affects the choice. For a hard
@@ -104,11 +109,9 @@ wait for the user to confirm the accepted subset.
 
 ## Review Surface
 
-Use only the fields needed to review the decision: Target, In/Out scope,
-observable Acceptance, Recommendation, fragile premise, and real Open blockers.
-When another stage will continue, add the Handoff Locked/Open/Skip fields from
-`bam-mode/references/handoff-contract.md`. Reference upstream facts by path and
-omit empty sections.
+When a spec is warranted, use only the fields needed to review the decision:
+Target, In/Out scope, observable Acceptance, Recommendation, fragile premise,
+and real Open blockers. Reference upstream facts by path and omit empty sections.
 
 ## Gates
 
@@ -123,13 +126,10 @@ omit empty sections.
 
 ## Ownership Boundary
 
-- Approval covers concrete decisions; unresolved blockers remain Open with
-  impact and owner.
-- Entity facts, typed interfaces, module shape, and task ordering enter their
-  downstream stages.
+- A spec locks only concrete decisions supported by the user or evidence;
+  unresolved blockers remain Open with impact and owner.
+- Implementation details stay out unless they materially change the choice.
 - Unsupported product tokens remain Open rather than becoming settled facts.
-- Each delivered slice leaves a usable product if later horizons are abandoned.
-- Investigation resolves uncertainty before slicing.
-
-After approval, report the accepted spec and the next single stage:
-`entity-model-design`, `codebase-design`, plan, or implementation.
+- A capability the user defers stays outside current Scope; express validation
+  as observable evidence without silently adding that capability.
+- Investigation resolves uncertainty before recommendation.

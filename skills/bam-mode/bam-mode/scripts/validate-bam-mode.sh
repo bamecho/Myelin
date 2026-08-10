@@ -272,8 +272,16 @@ require_pattern "$skill_dir/playbooks/design.md" \
   'Design must own the complete think -> entity model -> codebase design -> plan flow'
 
 require_pattern "$skills_root/think/SKILL.md" \
-  'smallest independently useful current delivery slice' \
-  'think must select the current independently useful delivery slice'
+  'Write a Minimal Spec only when' \
+  'think must make spec output conditional on the decision'
+
+reject_pattern "$skills_root/think/SKILL.md" \
+  'current delivery slice|Handoff|downstream skills|entity-model-design|codebase-design|next single stage' \
+  'independent think must not own Bam slicing, handoff, or downstream routing'
+
+require_pattern "$skill_dir/playbooks/design.md" \
+  'Use skill `think` to establish the smallest outcome target, current delivery' \
+  'Bam Design must retain current-slice selection when composing think'
 
 for no_roadmap_skill_file in \
   "$skill_dir/SKILL.md" \
