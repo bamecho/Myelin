@@ -200,21 +200,23 @@ Pass when:
 - It does not reopen approved entity or module decisions or dump unused
   principles.
 
-## E013. Think selects the current slice without another skill
+## E013. Think handles an explicit roadmap without owning downstream flow
 
 Prompt: "Turn this rough dashboard-sharing idea into a spec and roadmap. I want
 to validate private expiring links before adding public links or analytics."
 
 Pass when:
 
-- `think` produces a minimal outcome spec and selects private expiring links as
-  the current delivery slice rather than drafting a complete-product PRD,
+- `think` produces a compact decision/spec and makes private expiring links the
+  current roadmap horizon rather than drafting a complete-product PRD,
   architecture, or implementation plan.
 - The answer stays in chat unless the prompt explicitly requests a file.
 - Because the prompt asks for a roadmap, public links and analytics remain
   shallow later outcomes without premature entity or interface detail.
-- Only the current slice proceeds to entity and codebase design.
-- No second roadmap skill, skip ceremony, or duplicate handoff is introduced.
+- No Handoff, downstream skill, approval routing, or next-stage narration is
+  introduced by the independent `think` response.
+- When the same request runs through Bam Design, the existing Design playbook
+  still selects private expiring links as the current delivery slice.
 
 ## E014. Codebase design keeps Definition and Audit separate
 

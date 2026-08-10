@@ -127,3 +127,44 @@ dependency, and `src/index.js` remains byte-for-byte unchanged.
   with no function bodies or predicted diff.
 - Keep Audit Mode as an explicit review branch, never a mandatory pre-build
   stage. Findings require repository evidence and a smaller target contract.
+
+## 2026-08-10: whole-system shape before declarations
+
+An observed Go design failure motivated a new fixture with two approval callers,
+an atomic order/outbox write, a background delivery worker, provider
+deduplication, and crash recovery. JavaScript sync and billing fixtures remained
+the language-neutral regressions. All runs used isolated new projects with
+`agy` and `Gemini 3.6 Flash (High)`.
+
+The current skill produced a correct static dependency map and contracts, but
+required readers to reconstruct the caller-to-transaction-to-worker behavior
+from package-local Tech Notes. It also copied unchanged declarations and left
+notification intent construction implicit in the persistence adapter.
+
+Early candidates established caller scenarios and critical interactions first,
+but exposed measured regressions: full function bodies, stale alternatives as
+output ceremony, generic `Store.Save` contracts that displaced domain policy
+into infrastructure, invented locking requirements, and dry-run flags or output
+callbacks added to the sync executor. Each regression produced the next narrow
+instruction or shape-review check; no unobserved language-specific rule was
+added.
+
+The promoted candidate is self-contained under `codebase-design/`. It uses a
+private `references/shape-review.md`, not architect or principle resources. The
+final Go artifact contained 719 words versus the current skill's 812, traced
+approval and crash recovery before declarations, made the domain construct an
+explicit notification intent, cited preserved contracts, and contained no
+function bodies or implementation plan. A blinded Gemini 3.6 Flash review chose
+it as a substantive replacement for the current artifact.
+
+Final JavaScript regressions preserved the intended language-native shapes:
+
+| Fixture | Words | Material result |
+|---|---:|---|
+| Sync preview | 745 | `planSync(records)` is shared data; CLI owns preview formatting; `syncSessions(records, client)` remains execution-only. |
+| Billing preview | 621 | JavaScript declarations, independent normalize/select exports, one shared charge plan, and no gateway call during preview. |
+
+The local shell lacked a Go executable, so it could not independently run
+`go test ./...`. The isolated agy baseline reported the fixture's existing order
+test passing; promotion rests primarily on observable design behavior, the
+blinded comparison, JSON/structure checks, and the JavaScript regressions.

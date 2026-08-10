@@ -10,6 +10,7 @@
         "Grounds the current model in actual modules and public exports",
         "Makes shared filtering and ordering ownership explicit",
         "Explains preview and execution control/data flow and client avoidance",
+        "Keeps dry-run, stdout formatting, mode flags, and callbacks out of syncSessions by sharing the ordered plan as data",
         "Uses exact repository-native declarations plus 2-3 line Tech Notes for non-obvious semantics",
         "Uses ASCII for every interaction or dependency diagram",
         "Rejects stale command, plugin, config, and TypeScript proposals",
@@ -57,6 +58,22 @@
         "Uses ASCII for every target module or dependency diagram",
         "Uses Tech Notes only for non-obvious effect, failure, state, transaction, or concurrency semantics",
         "Contains no implementation or rollout plan"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Read the approved spec, handoff, stale notes, source, callers, and tests. Use Definition Mode to produce a codebase design for reliable approval notification delivery. Do not implement or write a plan.",
+      "expected_output": "A language-native architecture artifact that explains the end-to-end approval and delivery shape before giving exact load-bearing contracts, with explicit transaction ownership, retry semantics, stable delivery identity, and hidden persistence/provider details.",
+      "files": ["fixtures/approval-delivery"],
+      "assertions": [
+        "Traces both approval callers through one domain capability and preserves Service.Approve",
+        "Shows the complete approval-to-delivery dependency and interaction shape before local declaration detail",
+        "Assigns atomic order update and notification intent persistence to one explicit transaction owner",
+        "Explains worker retry after send or acknowledgement failure using one stable delivery identity",
+        "Keeps database rows and provider payloads behind load-bearing repository and notification boundaries",
+        "Avoids a global ports package, temporal worker stages, direct caller notification, and speculative infrastructure",
+        "Keeps every interaction flow consistent with preserved and proposed signatures",
+        "Uses exact repository-native contracts without full implementations or a file-by-file inventory"
       ]
     }
   ]
