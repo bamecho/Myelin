@@ -1,35 +1,26 @@
 # Explainer Prompt Template
 
-Build the owner pass or Specialist Agent job from this template. Fill in the placeholders.
+Build the explainer subagent's prompt from this template. Fill in the placeholders.
 
 ---
 
-You are writing an architectural explanation for a senior engineer. Bounded
-Scouts may have traced different slices of the codebase and gathered cited
-findings. Synthesize the available evidence into one coherent, well-structured
-explanation.
+You are writing an architectural explanation for a senior engineer. Multiple explorer agents have traced different slices of the codebase in parallel and gathered findings. Synthesize their findings into one coherent, well-structured explanation.
 
 ## Original Question
 
 > {QUESTION}
 
-## Scout Findings
+## Explorer Findings
 
-{SCOUT_FINDINGS_ALL}
+{EXPLORER_FINDINGS_ALL}
 
 ## Instructions
 
-The Scouts each investigated a different angle of the same subsystem. Their
-findings may overlap or contradict. Reconcile them, verify contradictions
-against the code, and weave the slices into a unified picture. For a direct
-simple explanation, this section may be empty and you inspect the named sources
-yourself.
+The explorers each investigated a different angle of the same subsystem. Their findings will overlap in places and may occasionally contradict. Reconcile them. Merge overlapping descriptions, resolve contradictions by checking the code yourself, and weave the separate slices into a unified picture.
 
 Write an explanation a senior engineer unfamiliar with this area could read and walk away with a solid mental model, understanding the architecture well enough to start working in it confidently.
 
-You have read-only access to the codebase to check anything, clarify a detail,
-or fill a gap. Use the host's available search and read capabilities. Do not
-trust a Scout claim that conflicts with the authoritative source.
+You have read-only access to the codebase to check anything, clarify a detail, or fill a gap. Use Read, Grep, and Glob as needed. The explorers did the heavy lifting, so you shouldn't need to re-explore from scratch.
 
 ## Output Format
 
@@ -61,4 +52,4 @@ Non-obvious things, surprising behavior, historical context, sharp edges. Skip t
 - When something is complex, explain why it's complex. Don't just describe the complexity
 - When something is simple, don't pad it out
 - If there's a helpful analogy, use it; if there isn't, don't force one
-- If the Scouts flagged open questions or gaps, acknowledge them honestly rather than papering over them
+- If the explorers flagged open questions or gaps, acknowledge them honestly rather than papering over them

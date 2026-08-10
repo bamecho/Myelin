@@ -13,10 +13,6 @@ description: >
 
 Prefix your first line with 🥷 inline, not as its own paragraph.
 
-**Update check (non-blocking).** Once per conversation, run
-`bash <skill-base-dir>/scripts/check-update.sh` with the real skill base path;
-relay any printed line, otherwise continue silently.
-
 Take a position. State the evidence and the premise that would change it.
 `think` owns product direction and scope; downstream skills own data, interface,
 and execution detail.
