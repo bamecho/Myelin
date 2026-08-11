@@ -334,6 +334,18 @@ require_pattern "$skills_root/codebase-design/SKILL.md" \
   '2-3 line Tech Notes' \
   'Definition contracts must keep Tech Notes short'
 
+require_pattern "$skills_root/codebase-design/SKILL.md" \
+  'in full before' \
+  'Definition Mode must load the complete shape review'
+
+require_pattern "$skills_root/codebase-design/references/shape-review.md" \
+  'Review every Definition Mode shape' \
+  'shape review must apply to every Definition Mode design'
+
+reject_pattern "$skills_root/codebase-design/references/shape-review.md" \
+  'only to review a non-obvious' \
+  'shape review must not depend on a non-obvious-shape judgment'
+
 require_pattern "$skill_dir/references/plan.md" \
   'one \*\*outcome\*\* ticket.*approved product outcome' \
   'plan must map one parent ticket for the approved product outcome'
