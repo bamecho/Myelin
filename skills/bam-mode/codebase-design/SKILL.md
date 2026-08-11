@@ -37,6 +37,11 @@ file inventory is not a runtime model.
 
 ## Definition Mode
 
+Read [`references/shape-review.md`](references/shape-review.md) in full before
+drafting every Definition Mode design. Use it as a private review lens and
+revise material boundary problems before presenting the design; report the
+resulting decisions, not rubric compliance.
+
 ### Contract
 
 - **Outcome:** the smallest coherent system shape that lets callers complete the
@@ -76,9 +81,7 @@ file inventory is not a runtime model.
 4. When locked constraints and repository precedent leave a consequential
    ownership or dependency choice genuinely open, compare structurally distinct
    viable shapes in reasoning. Stale proposals and a human-corrected shape are
-   evidence, not alternatives. Screen a non-obvious new shape against
-   [`references/shape-review.md`](references/shape-review.md) as a private review
-   lens, then revise the boundary before presenting it.
+   evidence, not alternatives.
 5. Write exact, repository-native declarations only for new or changed
    load-bearing boundaries: contracts whose change would alter dependency
    direction, caller knowledge, state ownership, or failure semantics. Cite

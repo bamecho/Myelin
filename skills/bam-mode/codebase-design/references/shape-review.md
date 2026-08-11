@@ -1,8 +1,8 @@
 # Architecture shape review
 
-Use this only to review a non-obvious new Definition Mode shape. Revise the
-design when one of these problems is material; the design artifact reports the
-resulting decision, not rubric compliance.
+Review every Definition Mode shape with this lens. Revise the design when one
+of these problems is material; the design artifact reports the resulting
+decision, not rubric compliance.
 
 ## Shallow boundary
 
